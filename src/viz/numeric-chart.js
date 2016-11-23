@@ -38,7 +38,7 @@ const aroundZero = (g, data, config) => {
   const { scale, origin } = makeScale([min, max], [left, left + w])
   const fns = {
     x: x(scale, origin, left),
-    width: width(scale, origin, w),
+    width: width(scale, origin, w)
   }
   chart(g, data, config, fns)
 }
@@ -48,7 +48,7 @@ const lowPositives = (g, data, config) => {
   const { scale, origin } = makeScale([0, max], [left, left + w])
   const fns = {
     x: x(scale, origin, left),
-    width: width(scale, origin, w),
+    width: width(scale, origin, w)
   }
   chart(g, data, config, fns)
 }
@@ -58,7 +58,7 @@ const lowNegatives = (g, data, config) => {
   const { scale, origin } = makeScale([min, 0], [left, left + w])
   const fns = {
     x: x(scale, origin, left),
-    width: width(scale, origin, w),
+    width: width(scale, origin, w)
   }
   chart(g, data, config, fns)
 }
@@ -68,7 +68,7 @@ const highPositives = (g, data, config) => {
   const { scale, origin } = makeScale([min, max], [left + 10, left + w])
   const fns = {
     x: xJaggedLeft,
-    width: widthJaggedLeft(scale, w),
+    width: widthJaggedLeft(scale, w)
   }
   chart(g, data, config, fns)
 }
@@ -79,7 +79,7 @@ const highNegatives = (g, data, config) => {
   const origin = scale(max)
   const fns = {
     x: xJaggedRight(scale, left),
-    width: widthJaggedRight(scale, origin, w),
+    width: widthJaggedRight(scale, origin, w)``
   }
   chart(g, data, config, fns)
 }
