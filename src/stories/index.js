@@ -15,15 +15,21 @@ const numericStories = () => {
   const orderedData = sort((a, b) => a - b, data)
   const withNulls = [-0.0000230, null, -0.00176, -0.00540, null, -0.0250, -0.0432, -0.0677, -0.0977, null, null, -0.200, -0.228, -0.248, -0.257, -0.255, -0.241, -0.216, null, -0.147, -0.108, -0.0697, -0.0338, 0.001, 0.0322, 0.0582, 0.0733, 0.0747, 0.0620, 0.0372, 0.00445, -0.0311, -0.0638, -0.0885, -0.101, -0.100, -0.0850, -0.0583, -0.0239, 0.0131, null, 0.0744, null, 0.0929, 0.0828, 0.0616, 0.0327, 0.004]
   const withZero = [-0.0000230, 0.00, -0.00176, -0.00540, 0.00, -0.0250, -0.0432, -0.0677, -0.0977, 0.00, 0.00, -0.200, -0.228, -0.248, -0.257, -0.255, -0.241, -0.216, 0.00, -0.147, -0.108, -0.0697, -0.0338, 0.001, 0.0322, 0.0582, 0.0733, 0.0747, 0.0620, 0.0372, 0.00445, -0.0311, -0.0638, -0.0885, -0.101, -0.100, -0.0850, -0.0583, -0.0239, 0.0131, 0.00, 0.0744, 0.00, 0.0929, 0.0828, 0.0616, 0.0327, 0.004]
-  const highValues = map((d) => 100 + d, data)
+  const highValues = map((d) => 100 + d, positiveData)
   const highNegativeValues = map((d) => -d, highValues)
 
   storiesOf('Numeric Chart', module)
-  .add('with all positive values', () => (
+  .add('with low positive values', () => (
     <Chart chartFn={numericChart} data={positiveData}/>
   ))
-  .add('with all negative values', () => (
+  .add('with high positive values', () => (
+    <Chart chartFn={numericChart} data={highValues}/>
+  ))
+  .add('with low negative values', () => (
     <Chart chartFn={numericChart} data={negativeData}/>
+  ))
+  .add('with high negative values', () => (
+    <Chart chartFn={numericChart} data={highNegativeValues}/>
   ))
   .add('with some negative values', () => (
     <Chart chartFn={numericChart} data={data}/>
@@ -42,12 +48,6 @@ const numericStories = () => {
   ))
   .add('with zero', () => (
     <Chart chartFn={numericChart} data={withZero}/>
-  ))
-  .add('with high values', () => (
-    <Chart chartFn={numericChart} data={highValues}/>
-  ))
-  .add('with high negative values', () => (
-    <Chart chartFn={numericChart} data={highNegativeValues}/>
   ))
 }
 
