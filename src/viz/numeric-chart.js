@@ -1,119 +1,107 @@
 const d3 = require('d3')
 const { LIGHT_GRAY, RED, GREEN, DEFAULT_COLUMN_WIDTH } = require('../constants')
 
-const aroundZero = (g, data, config = {}) => {
-  const top   = config.top   || 0
-  const left  = config.left  || 0
-  const width = config.width || DEFAULT_COLUMN_WIDTH
+const height = 1
+const fill   =          (d)    => d === null ? LIGHT_GRAY : d > 0 ? GREEN : RED
+const y      = (top) => (d, i) => top + i
 
+const chart = (g, data, config, fns) => {
+  const { x, width } = fns
+  const top  = config.top || 0
+  g.selectAll('rect')
+    .data(data)
+    .enter().append('rect')
+    .style('height', height)
+    .style('y',      y(top))
+    .style('x',      x)
+    .style('width',  width)
+    .style('fill',   fill)
+}
+
+const x                = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? origin : scale(d)
+const xJaggedLeft      =                          (d, i) => i % 4
+const xJaggedRight     = (scale, left)         => (d)    => d === null ? left : scale(d)
+const width            = (scale, origin, w)    => (d)    => d === null ? w : Math.abs(scale(d) - origin)
+const widthJaggedLeft  = (scale, w)            => (d, i) => d === null ? w : scale(d) - i % 4
+const widthJaggedRight = (scale, origin, w)    => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
+
+const makeScale = (domain, range) => {
   const scale = d3.scaleLinear()
-    .domain([d3.min(data), d3.max(data)])
-    .range([left, left + width])
+    .domain(domain)
+    .range(range)
   const origin = scale(0)
-
-  g.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
-    .style('height', '1px')
-    .style('y',      (d, i) => top + i)
-    .style('x',      (d)    => d === null ? left : d > 0 ? origin : scale(d))
-    .style('width',  (d)    => d === null ? width : Math.abs(scale(d) - origin))
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : d > 0 ? GREEN : RED)
+  return { scale, origin }
 }
 
-const lowPositives = (g, data, config = {}) => {
-  const top   = config.top   || 0
-  const left  = config.left  || 0
-  const width = config.width || DEFAULT_COLUMN_WIDTH
-
-  const scale = d3.scaleLinear()
-    .domain([0, d3.max(data)])
-    .range([left, left + width])
-
-  g.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
-    .style('height', '1px')
-    .style('y',      (d, i) => top + i)
-    .style('x',      left)
-    .style('width',  (d)    => d === null ? width : scale(d))
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : GREEN)
+const aroundZero = (g, data, config) => {
+  const { w, left, min, max } = config
+  const { scale, origin } = makeScale([min, max], [left, left + w])
+  const fns = {
+    x: x(scale, origin, left),
+    width: width(scale, origin, w),
+  }
+  chart(g, data, config, fns)
 }
 
-const lowNegatives = (g, data, config = {}) => {
-  const top   = config.top   || 0
-  const left  = config.left  || 0
-  const width = config.width || DEFAULT_COLUMN_WIDTH
-
-  const scale = d3.scaleLinear()
-    .domain([d3.min(data), 0])
-    .range([left, left + width])
-  const origin = scale(0)
-
-  g.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
-    .style('height', '1px')
-    .style('y',      (d, i) => top + i)
-    .style('x',      (d)    => d === null ? left : scale(d))
-    .style('width',  (d)    => d === null ? width : origin - scale(d))
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : RED)
+const lowPositives = (g, data, config) => {
+  const { w, left, min, max } = config
+  const { scale, origin } = makeScale([0, max], [left, left + w])
+  const fns = {
+    x: x(scale, origin, left),
+    width: width(scale, origin, w),
+  }
+  chart(g, data, config, fns)
 }
 
-const highPositives = (g, data, config = {}) => {
-  const top   = config.top   || 0
-  const left  = config.left  || 0
-  const width = config.width || DEFAULT_COLUMN_WIDTH
-
-  const scale = d3.scaleLinear()
-    .domain([d3.min(data), d3.max(data)])
-    .range([left + 10, left + width])
-
-  g.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
-    .style('height', '1px')
-    .style('y',      (d, i) => top + i)
-    .style('x',      (d, i) => i % 4)
-    .style('width',  (d, i) => d === null ? width : scale(d) - i % 4)
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : GREEN)
+const lowNegatives = (g, data, config) => {
+  const { w, left, min, max } = config
+  const { scale, origin } = makeScale([min, 0], [left, left + w])
+  const fns = {
+    x: x(scale, origin, left),
+    width: width(scale, origin, w),
+  }
+  chart(g, data, config, fns)
 }
 
-const highNegatives = (g, data, config = {}) => {
-  const top   = config.top   || 0
-  const left  = config.left  || 0
-  const width = config.width || DEFAULT_COLUMN_WIDTH
+const highPositives = (g, data, config) => {
+  const { w, left, min, max } = config
+  const { scale, origin } = makeScale([min, max], [left + 10, left + w])
+  const fns = {
+    x: xJaggedLeft,
+    width: widthJaggedLeft(scale, w),
+  }
+  chart(g, data, config, fns)
+}
 
-  const scale = d3.scaleLinear()
-    .domain([d3.min(data), d3.max(data)])
-    .range([left, left + width - 10])
-  const origin = scale(d3.max(data))
-
-  g.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
-    .style('height', '1px')
-    .style('y',      (d, i) => top + i)
-    .style('x',      (d)    => d === null ? left : scale(d))
-    .style('width',  (d, i) => d === null ? width : origin - scale(d) + 6 - i % 4)
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : RED)
+const highNegatives = (g, data, config) => {
+  const { w, left, min, max } = config
+  const { scale } = makeScale([min, max], [left, left + w - 10])
+  const origin = scale(max)
+  const fns = {
+    x: xJaggedRight(scale, left),
+    width: widthJaggedRight(scale, origin, w),
+  }
+  chart(g, data, config, fns)
 }
 
 const numericChart = (g, data, config = {}) => {
   const min = d3.min(data)
   const max = d3.max(data)
+  config.left = config.left  || 0
+  config.w    = config.width || DEFAULT_COLUMN_WIDTH
+  config.min  = min
+  config.max  = max
   if (min < 0 && max > 0 ) return aroundZero(g, data, config)
 
   if (min >= 0) {
-    const nearZero = Math.abs(max) / Math.abs(min) > 2
+    const nearZero = max / min > 2
     if (nearZero) return lowPositives(g, data, config)
     return highPositives(g, data, config)
   } else {
-    const nearZero = Math.abs(min) / Math.abs(max) > 2
+    const nearZero = min / max > 2
     if (nearZero) return lowNegatives(g, data, config)
     return highNegatives(g, data, config)
   }
-
 }
 
 module.exports = {
