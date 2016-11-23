@@ -79,7 +79,7 @@ const highNegatives = (g, data, config) => {
   const origin = scale(max)
   const fns = {
     x: xJaggedRight(scale, left),
-    width: widthJaggedRight(scale, origin, w)``
+    width: widthJaggedRight(scale, origin, w)
   }
   chart(g, data, config, fns)
 }
