@@ -1,0 +1,25 @@
+{
+  "name": "stripes",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.7.0",
+    "@kadira/storybook": "^2.21.0"
+  },
+  "dependencies": {
+    "d3": "^4.3.0",
+    "moment": "^2.16.0",
+    "ramda": "^0.22.1",
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0",
+    "react-faux-dom": "^3.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
+  }
+}
