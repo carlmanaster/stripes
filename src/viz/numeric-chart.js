@@ -91,17 +91,11 @@ const numericChart = (g, data, config = {}) => {
   config.w    = config.width || DEFAULT_COLUMN_WIDTH
   config.min  = min
   config.max  = max
-  if (min < 0 && max > 0 ) return aroundZero(g, data, config)
-
-  if (min >= 0) {
-    const nearZero = max / min > 2
-    if (nearZero) return lowPositives(g, data, config)
-    return highPositives(g, data, config)
-  } else {
-    const nearZero = min / max > 2
-    if (nearZero) return lowNegatives(g, data, config)
-    return highNegatives(g, data, config)
-  }
+  if (min < 0 && max > 0 )       return aroundZero(g, data, config)
+  if (min >= 0 && max / min > 2) return lowPositives(g, data, config)
+  if (min >= 0)                  return highPositives(g, data, config)
+  if (min / max > 2)             return lowNegatives(g, data, config)
+  return highNegatives(g, data, config)
 }
 
 module.exports = {
