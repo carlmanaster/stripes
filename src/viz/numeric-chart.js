@@ -19,7 +19,7 @@ const chart = (g, data, config, fns) => {
 }
 
 const x                = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? origin : scale(d)
-const xJaggedLeft      =                          (d, i) => i % 4
+const xJaggedLeft      =                          (d, i) => d === null ? left : i % 4
 const xJaggedRight     = (scale, left)         => (d)    => d === null ? left : scale(d)
 const width            = (scale, origin, w)    => (d)    => d === null ? w : Math.abs(scale(d) - origin)
 const widthJaggedLeft  = (scale, w)            => (d, i) => d === null ? w : scale(d) - i % 4
