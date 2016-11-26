@@ -54,13 +54,15 @@ const highNegatives = {
 
 const chart = (functions, config, g, data) => {
   const { xFn, widthFn, domainFn, rangeFn, scaleFn } = functions
-  const { w, left, min, max } = config
+  const { w, left, min, max, className } = config
   const scale = d3.scaleLinear()
     .domain(domainFn(min, max))
     .range(rangeFn(left, w))
   const origin = scaleFn(scale, max)
   const top  = config.top || 0
-  g.selectAll('rect')
+  const myG = g.append('g')
+   .classed(className, true);
+  myG.selectAll('rect')
     .data(data)
     .enter().append('rect')
     .style('height', 1)
