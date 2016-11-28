@@ -13,8 +13,8 @@ const Chart = React.createClass({
     const { chartFn, data, config } = this.props
     const node = FauxDom.createElement('svg')
     const g = d3.select(node)
-    .attr('width', 300)
-    .attr('height', 300)
+    .attr('width', 80)
+    .attr('height', 60)
     .append('g')
 
     chartFn(g, data, config)
