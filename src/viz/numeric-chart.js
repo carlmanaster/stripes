@@ -28,7 +28,7 @@ const aroundZero = {
   scaleFn:  scaleStandard
 }
 
-const lowNegatives = {
+const jaggedLeft = {
   xFn:      xJaggedLeft,
   widthFn:  widthJaggedLeft,
   domainFn: domainStandard,
@@ -36,7 +36,7 @@ const lowNegatives = {
   scaleFn:  scaleStandard
 }
 
-const highPositives = {
+const negative = {
   xFn:      xStandard,
   widthFn:  widthStandard,
   domainFn: domainNegative,
@@ -44,7 +44,7 @@ const highPositives = {
   scaleFn:  scaleStandard
 }
 
-const highNegatives = {
+const jaggedRight = {
   xFn:      xJaggedRight,
   widthFn:  widthJaggedRight,
   domainFn: domainStandard,
@@ -75,9 +75,9 @@ const chart = (functions, config, g, data) => {
 const pickFunctions = (min, max) => {
   if (min < 0 && max > 0 )       return aroundZero
   if (min >= 0 && max / min > 2) return aroundZero
-  if (min >= 0)                  return lowNegatives
-  if (min / max > 2)             return highPositives
-  else                           return highNegatives
+  if (min >= 0)                  return jaggedLeft
+  if (min / max > 2)             return negative
+  else                           return jaggedRight
 }
 
 const numericChart = (g, data, config = {}) => {
