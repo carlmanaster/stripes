@@ -1,7 +1,7 @@
 const d3 = require('d3')
 const { BLUE, LIGHT_GRAY, DEFAULT_COLUMN_WIDTH } = require('../constants')
 
-const ordinalChart = (g, data, config = {}) => {
+const categoricalChart = (g, data, config = {}) => {
   const top   = config.top   || 0
   const left  = config.left  || 0
   const width = config.width || DEFAULT_COLUMN_WIDTH
@@ -27,5 +27,5 @@ const ordinalChart = (g, data, config = {}) => {
 }
 
 module.exports = {
-  ordinalChart
+  categoricalChart
 }

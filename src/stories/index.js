@@ -3,7 +3,7 @@ const { map, sort } = require('ramda')
 const { storiesOf, action, linkTo } = require('@kadira/storybook')
 
 const { numericChart } = require('../viz/numeric-chart')
-const { ordinalChart } = require('../viz/ordinal-chart')
+const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
 
 import Chart from './Chart'
@@ -52,20 +52,20 @@ const numericStories = () => {
   ))
 }
 
-const ordinalStories = () => {
+const categoricalStories = () => {
   const data = ['red', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'blue', 'yellow', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'green', 'yellow', 'red', 'blue', 'yellow', 'yellow', 'yellow', 'red', 'blue', 'red', 'blue', 'red', 'blue']
   const withNulls = ['red', 'red', null, 'green', 'red', 'green', null, 'red', 'blue', null, 'red', null, 'green', 'red', 'green', null, 'red', 'green', 'yellow', 'red', 'blue', 'yellow', 'yellow', 'yellow', 'red', null, null, null, 'red', 'blue']
   const orderedData = sort((a, b) => a.localeCompare(b), data)
   const keys = ['blue', 'green', 'red', 'yellow']
-  storiesOf('Ordinal Chart', module)
+  storiesOf('Categorical Chart', module)
   .add('unordered', () => (
-    <Chart chartFn={ordinalChart} data={data} config={{keys}}/>
+    <Chart chartFn={categoricalChart} data={data} config={{keys}}/>
   ))
   .add('ordered', () => (
-    <Chart chartFn={ordinalChart} data={orderedData} config={{keys}}/>
+    <Chart chartFn={categoricalChart} data={orderedData} config={{keys}}/>
   ))
   .add('with nulls', () => (
-    <Chart chartFn={ordinalChart} data={withNulls} config={{keys}}/>
+    <Chart chartFn={categoricalChart} data={withNulls} config={{keys}}/>
   ))
 }
 
@@ -87,14 +87,14 @@ const booleanStories = () => {
 
 const multichartStories = () => {
   const numericData = [-0.0000230, -0.000356, -0.00176, -0.00540, -0.0127, -0.0250, -0.0432, -0.0677, -0.0977, -0.132, -0.167, -0.200, -0.228, -0.248, -0.257, -0.255, -0.241, -0.216, -0.184, -0.147, -0.108, -0.0697, -0.0338, 0.001, 0.0322, 0.0582, 0.0733, 0.0747, 0.0620, 0.0372, 0.00445, -0.0311, -0.0638, -0.0885, -0.101, -0.100, -0.0850, -0.0583, -0.0239, 0.0131, 0.0475, 0.0744, 0.0901, 0.0929, 0.0828, 0.0616, 0.0327, 0.004]
-  const ordinalData = ['red', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'blue', 'yellow', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'green', 'yellow', 'red', 'blue', 'yellow', 'yellow', 'yellow', 'red', 'blue', 'red', 'blue', 'red', 'blue', 'red', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'blue', 'yellow', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'green', 'yellow', 'red', 'blue', 'yellow']
+  const categoricalData = ['red', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'blue', 'yellow', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'green', 'yellow', 'red', 'blue', 'yellow', 'yellow', 'yellow', 'red', 'blue', 'red', 'blue', 'red', 'blue', 'red', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'blue', 'yellow', 'red', 'green', 'green', 'red', 'green', 'blue', 'red', 'green', 'yellow', 'red', 'blue', 'yellow']
   const booleanData = [true, true, false, true, false, false, true, false, false, true, false, true, false, true, false, false, true, false, true, false, false, true, true, false, true, false, false, true, false, false, true, false, true, false, true, false, false, true, false, true, false, false, true, true, false, true, false, false]
   const keys = ['blue', 'green', 'red', 'yellow']
   storiesOf('Multiple Charts', module)
   .add('with multiple charts', () => (
     <MultiChart
-      chartFn={[numericChart, booleanChart, ordinalChart]}
-      data={[numericData, booleanData, ordinalData]}
+      chartFn={[numericChart, booleanChart, categoricalChart]}
+      data={[numericData, booleanData, categoricalData]}
       config={[{className: 'c1', top: 20}, {className: 'c2', top: 20, left: 40}, {className: 'c3', top: 20, left: 80, keys}]}
     />
   ))
@@ -108,7 +108,7 @@ const dateStories = () => {
 }
 
 numericStories()
-ordinalStories()
+categoricalStories()
 booleanStories()
 dateStories()
 multichartStories()
