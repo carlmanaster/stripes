@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import './viz/stripes.css'
 
 import Chart from './stories/Chart'
 const { numericChart } = require('./viz/numeric-chart')

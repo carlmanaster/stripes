@@ -65,11 +65,13 @@ const chart = (functions, config, g, data) => {
   myG.selectAll('rect')
     .data(data)
     .enter().append('rect')
-    .style('height', 1)
+    .classed('stripe', true)
+    .classed('null', (d) => d === null)
+    .classed('numeric-positive', (d) => d > 0)
+    .classed('numeric-negative', (d) => d < 0)
     .style('y',      (d, i) => top + i)
     .style('x',      xFn(scale, origin, left))
     .style('width',  widthFn(scale, origin, w))
-    .style('fill',   (d) => d === null ? LIGHT_GRAY : d > 0 ? GREEN : RED)
 }
 
 const pickFunctions = (min, max) => {

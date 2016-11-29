@@ -19,11 +19,12 @@ const categoricalChart = (g, data, config = {}) => {
   myG.selectAll('rect')
     .data(data)
     .enter().append('rect')
-    .style('height', '1px')
+    .classed('stripe', true)
+    .classed('null', (d) => d === null)
+    .classed('categorical', (d) => d !== null)
     .style('y',      (d, i) => top + i)
     .style('x',      (d)    => d === null ? left : left + keys.indexOf(d) * barWidth)
     .style('width',  (d)    => d === null ? width : barWidth - 1)
-    .style('fill',   (d)    => d === null ? LIGHT_GRAY : BLUE)
 }
 
 module.exports = {
