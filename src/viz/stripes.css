@@ -3,25 +3,25 @@
 }
 
 .numeric-positive {
-  fill: #59ce4e
+  fill: #59ce4e;
 }
 
 .numeric-negative {
-  fill: #ff7f7f
+  fill: #ff7f7f;
 }
 
 .boolean-true {
-  fill: #59ce4e
+  fill: #59ce4e;
 }
 
 .boolean-false {
-  fill: #ff7f7f
+  fill: #ff7f7f;
 }
 
 .categorical {
-  fill: #4e83d8
+  fill: #4e83d8;
 }
 
 .null {
-  fill: #d8d8d8
+  fill: #d8d8d8;
 }
