@@ -17,7 +17,6 @@ const column = (data, ordered, index) => {
   if (index < 0) return undefined
   if (index >= width(data)) return undefined
   const a = map(a => a[index], data)
-  mapIndexed((val, idx) => idx + '-' + val, ['f', 'o', 'o', 'b', 'a', 'r']);
   return mapIndexed((o, i) => a[ordered(i)], a)
 }
 

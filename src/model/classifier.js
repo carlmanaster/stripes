@@ -3,7 +3,7 @@ const moment = require('moment')
 const { DATE_FORMATS } = require ('../constants')
 
 const isNull = (x) => {
-  return x === null || x === undefined
+  return x === null || x === undefined || x === ''
 }
 
 const isNumber = (s) => {
@@ -16,7 +16,7 @@ const isBoolean = (s) => {
 }
 
 const isDate = (s) => {
-  return parseInt(s).toString() !== s && moment(s, DATE_FORMATS).isValid()
+  return parseInt(s, 10).toString() !== s && moment(s, DATE_FORMATS).isValid()
 }
 
 const isNumberArray = (a) => {

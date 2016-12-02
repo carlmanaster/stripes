@@ -1,0 +1,4 @@
+* not adding keys to categorical chart
+* blanks don't appear to be treated as null
+* jaggedLeft determination seems to be in error
+* when jaggedLeft, width goes crazy.

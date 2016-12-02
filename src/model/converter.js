@@ -26,7 +26,7 @@ const toBoolean = (s) => {
 
 const toDate = (s) => {
   if (!s) return null
-  if (parseInt(s).toString() === s) return null
+  if (parseInt(s, 10).toString() === s) return null
   const m = moment(s, DATE_FORMATS)
   return m.isValid() ? m.toDate() : null
 }

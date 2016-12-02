@@ -1,16 +1,16 @@
 const d3 = require('d3')
-const { LIGHT_GRAY, RED, GREEN, DEFAULT_COLUMN_WIDTH } = require('../constants')
+const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 
 const xStandard        = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? origin : scale(d)
-const xJaggedLeft      = (scale, origin, left) => (d, i) => d === null ? left : i % 4
+const xPositive        = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? left : scale(d)
+const xJaggedLeft      = (scale, origin, left) => (d, i) => d === null ? left : origin + i % 4
 const xJaggedRight     = (scale, origin, left) => (d)    => d === null ? left : scale(d)
 
 const widthStandard    = (scale, origin, w)    => (d)    => d === null ? w : Math.abs(scale(d) - origin)
-const widthJaggedLeft  = (scale, origin, w)    => (d, i) => d === null ? w : scale(d) - i % 4
+const widthJaggedLeft  = (scale, origin, w)    => (d, i) => d === null ? w : Math.abs(scale(d) - origin - i % 4)
 const widthJaggedRight = (scale, origin, w)    => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
 
 const domainStandard   = (min, max) => [min, max]
-const domainPositive   = (min, max) => [0, max]
 const domainNegative   = (min, max) => [min, 0]
 
 const rangeStandard    = (left, w) => [left, left + w]
@@ -28,11 +28,11 @@ const aroundZero = {
   scaleFn:  scaleStandard
 }
 
-const jaggedLeft = {
-  xFn:      xJaggedLeft,
-  widthFn:  widthJaggedLeft,
+const positive = {
+  xFn:      xPositive,
+  widthFn:  widthStandard,
   domainFn: domainStandard,
-  rangeFn:  rangeJaggedLeft,
+  rangeFn:  rangeStandard,
   scaleFn:  scaleStandard
 }
 
@@ -41,6 +41,14 @@ const negative = {
   widthFn:  widthStandard,
   domainFn: domainNegative,
   rangeFn:  rangeStandard,
+  scaleFn:  scaleStandard
+}
+
+const jaggedLeft = {
+  xFn:      xJaggedLeft,
+  widthFn:  widthJaggedLeft,
+  domainFn: domainStandard,
+  rangeFn:  rangeJaggedLeft,
   scaleFn:  scaleStandard
 }
 
@@ -61,7 +69,9 @@ const chart = (functions, config, g, data) => {
   const origin = scaleFn(scale, max)
   const top  = config.top || 0
   const myG = g.append('g')
-   .classed(className, true);
+   .classed(className, true)
+   .style('width', 5)
+
   myG.selectAll('rect')
     .data(data)
     .enter().append('rect')
@@ -76,9 +86,9 @@ const chart = (functions, config, g, data) => {
 
 const pickFunctions = (min, max) => {
   if (min < 0 && max > 0 )       return aroundZero
-  if (min >= 0 && max / min > 2) return aroundZero
+  if (min >= 0 && max / min > 4) return positive
   if (min >= 0)                  return jaggedLeft
-  if (min / max > 2)             return negative
+  if (min / max > 4)             return negative
   else                           return jaggedRight
 }
 

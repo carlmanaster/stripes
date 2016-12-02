@@ -14,6 +14,7 @@ describe('classifier', () => {
     it('should classify number array', () => {
       expect(isNumberArray(['7', '-5'])).toBe(true)
       expect(isNumberArray([null, '-5'])).toBe(true)
+      expect(isNumberArray(['', '-5'])).toBe(true)
       expect(isNumberArray(['7', 'a'])).toBe(false)
     })
   })
