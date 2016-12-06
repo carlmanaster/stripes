@@ -42,16 +42,16 @@ class App extends Component {
         <Chart chartFn={numericChart} data={highValues}/>
         <p/>
         <Chart chartFn={numericChart} data={data}/>
-        <Chart chartFn={numericChart} data={orderedData}/>
         <Chart chartFn={numericChart} data={withNulls}/>
+        <Chart chartFn={numericChart} data={orderedData}/>
         <p/>
         <Chart chartFn={booleanChart} data={b_data}/>
-        <Chart chartFn={booleanChart} data={b_orderedData}/>
         <Chart chartFn={booleanChart} data={b_withNulls}/>
+        <Chart chartFn={booleanChart} data={b_orderedData}/>
         <p/>
         <Chart chartFn={categoricalChart} data={c_data} config={{keys}}/>
-        <Chart chartFn={categoricalChart} data={c_orderedData} config={{keys}}/>
         <Chart chartFn={categoricalChart} data={c_withNulls} config={{keys}}/>
+        <Chart chartFn={categoricalChart} data={c_orderedData} config={{keys}}/>
         <p/>
         <Chart chartFn={numericChart} data={regressionData} config={{left: 60}}/>
       </div>
