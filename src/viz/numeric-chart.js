@@ -1,14 +1,14 @@
 const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 
-const xStandard        = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? origin : scale(d)
-const xPositive        = (scale, origin, left) => (d)    => d === null ? left : d > 0 ? left : scale(d)
-const xJaggedLeft      = (scale, origin, left) => (d, i) => d === null ? left : origin + i % 4
-const xJaggedRight     = (scale, origin, left) => (d)    => d === null ? left : scale(d)
+const xStandard        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? origin : scale(d)
+const xPositive        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? left : scale(d)
+const xJaggedLeft      = (scale, origin, left)    => (d, i) => d === null ? left : left + i % 4
+const xJaggedRight     = (scale, origin, left)    => (d)    => d === null ? left : scale(d)
 
-const widthStandard    = (scale, origin, w)    => (d)    => d === null ? w : Math.abs(scale(d) - origin)
-const widthJaggedLeft  = (scale, origin, w)    => (d, i) => d === null ? w : Math.abs(scale(d) - origin - i % 4)
-const widthJaggedRight = (scale, origin, w)    => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
+const widthStandard    = (scale, origin, left, w) => (d)    => d === null ? w : Math.abs(scale(d) - origin)
+const widthJaggedLeft  = (scale, origin, left, w) => (d, i) => d === null ? w : scale(d) - left - (i % 4)
+const widthJaggedRight = (scale, origin, left, w) => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
 
 const domainStandard   = (min, max) => [min, max]
 const domainNegative   = (min, max) => [min, 0]
@@ -81,7 +81,7 @@ const chart = (functions, config, g, data) => {
     .classed('numeric-negative', (d) => d < 0)
     .style('y',      (d, i) => top + i)
     .style('x',      xFn(scale, origin, left))
-    .style('width',  widthFn(scale, origin, w))
+    .style('width',  widthFn(scale, origin, left, w))
 }
 
 const pickFunctions = (min, max) => {
