@@ -12,6 +12,7 @@ const data = require('../fin105.js')()
 const rows = data.split('\n')
 const values = rows.slice(0).map(b => b.split(',')).map(b => b.slice(0, -1))
 const dataTable = converter.toDataTable(values)
+const { curry } = require('ramda')
 
 import MultiChart from '../stories/MultiChart'
 const { numericChart } = require('../viz/numeric-chart')
@@ -32,12 +33,16 @@ const dataFn = (column) => {
 
 class App extends Component {
   render() {
+    const height = table.height(dataTable)
+    const ordered = (i) => height - i
+    const c = curry(table.column)(dataTable, ordered)
+
     var charts = []
     var datas = []
     var configs = []
     for (var i = 0; i < table.width(dataTable); i++) {
-      const column = table.column(dataTable, (i) => i, i).slice(1)
-      const name = table.column(dataTable, (i) => i, i)[0]
+      const column = c(i).slice(1)
+      const name = c(i)[0]
       const cf = chartFn(column)
       const config = {className: name, top: 20, left: 50 * i}
       if (cf === categoricalChart) {
