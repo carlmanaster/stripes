@@ -1,5 +1,6 @@
 const { map, addIndex } = require('ramda')
 const mapIndexed = addIndex(map);
+const { rank } = require('./sorter')
 
 const width = (data) => {
   return data.length === 0 ? 0 : data[0].length
@@ -28,10 +29,16 @@ const substituteColumn = (data, index, newColumn) => {
   return mapIndexed((a, i) => substituteElement(a, index, newColumn[i]), data)
 }
 
+const byColumn = (data, index) => {
+  const order = rank(column(data, n => n, index))
+  return n => order[n]
+}
+
 module.exports = {
   width,
   height,
   row,
   column,
-  substituteColumn
+  substituteColumn,
+  byColumn
 }
