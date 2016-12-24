@@ -44,4 +44,15 @@ describe(`nice-number`, () => {
   it(`should use exponential notation for values >= 1,000,000,000,000`, () => {
     expect(niceNumber(1000000000000)).toBe(`1.0e+12`)
   })
+
+  it(`should handle negative numbers properly`, () => {
+    expect(niceNumber(-0.00091)).toBe(`-9.1e-4`)
+    expect(niceNumber(-0.123)).toBe(`-0.123`)
+    expect(niceNumber(-7)).toBe(`-7.0`)
+    expect(niceNumber(-100)).toBe(`-100`)
+    expect(niceNumber(-100000)).toBe(`-100K`)
+    expect(niceNumber(-100000000)).toBe(`-100M`)
+    expect(niceNumber(-100000000000)).toBe(`-100G`)
+    expect(niceNumber(-1000000000000)).toBe(`-1.0e+12`)
+  })
 })

@@ -31,7 +31,7 @@ const chartFn = (column) => {
 
 class App extends Component {
   render() {
-    const ordered = table.byColumn(dataTable, 3)
+    const ordered = table.byColumn(dataTable, 33)
 
     const c = curry(table.column)(dataTable, ordered)
 
@@ -42,7 +42,7 @@ class App extends Component {
       const column = c(i)
       const name = names[i]
       const cf = chartFn(column)
-      const config = {className: name, top: 20, left: 50 * i}
+      const config = {name, className: name, top: 20, left: 50 * i}
       if (cf === categoricalChart) {
         config['keys'] = uniq(column).sort()
       }
@@ -52,10 +52,6 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>App</h2>
-        </div>
-        <p/>
         <MultiChart
           chartFn={charts}
           data={datas}

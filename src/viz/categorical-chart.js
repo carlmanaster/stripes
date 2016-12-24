@@ -21,7 +21,7 @@ const categoricalChart = (g, data, config = {}) => {
     .style('x',             (d)    => d === null ? left  : left + keys.indexOf(d) * increment)
     .style('width',         (d)    => d === null ? width : barWidth - 1)
     .append('svg:title')
-    .text(                  (d)    => config.className + ': ' + (d === null ? 'null' : d))
+    .text(                  (d)    => config.name + ': ' + (d === null ? 'null' : d))
 }
 
 module.exports = {
