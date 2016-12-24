@@ -60,6 +60,10 @@ describe('table', () => {
       const byColumn1 = table.byColumn(data, 1)
       expect(table.column(data, byColumn1, 0)).toEqual([2, 3, 1])
     })
+    it('should return default order if column is undefined', () => {
+      const order = table.byColumn(data, undefined)
+      expect(table.column(data, order, 1)).toEqual([6, 2, 4])
+    })
   })
 
 
