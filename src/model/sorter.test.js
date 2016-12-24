@@ -11,6 +11,11 @@ describe('sorter', () => {
     const expected = [1, 2, 3, 4, 0]
     expect(rank(column)).toEqual(expected)
   })
+  it('should sort numerically', () => {
+    const column = [1, 2, 10]
+    const expected = [0, 1, 2]
+    expect(rank(column)).toEqual(expected)
+  })
   it('should sort nulls to the top', () => {
     const column = [5, 1, null, 2, 4]
     const expected = [2, 1, 3, 4, 0]

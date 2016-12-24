@@ -57,7 +57,6 @@ describe('converter', () => {
         ['b', false, null, toDate('01/01/2019')]]
       expect(converter.toDataTable(stringTable)).toEqual(expected)
     })
-
   })
 })
 

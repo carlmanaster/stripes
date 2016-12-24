@@ -48,11 +48,11 @@ const toDataTable = (t) => {
   let result = clone(t)
   for (let i = 0; i < table.width(t); i++) {
     const c = table.column(t, o, i)
-    if (classifier.isBooleanArray(c)) {
+    if (classifier.representsBooleanArray(c)) {
       result = table.substituteColumn(result, i, toBooleanArray(c))
-    } else if (classifier.isDateArray(c)) {
+    } else if (classifier.representsDateArray(c)) {
       result = table.substituteColumn(result, i, toDateArray(c))
-    } else if (classifier.isNumberArray(c)) {
+    } else if (classifier.representsNumberArray(c)) {
       result = table.substituteColumn(result, i, toNumberArray(c))
     }
   }

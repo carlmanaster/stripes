@@ -4,14 +4,16 @@ import '../viz/stripes.css'
 
 const { uniq } = require('ramda')
 
-const classifier = require('../model/classifier')
 const converter = require('../model/converter')
+const { isNumberArray, isBooleanArray } = require('../model/classifier')
 const table = require('../model/table')
 // const data = require('../example-data.js')()
-// const data = require('../fin105.js')()
-const data = require('../fin105-part.js')()
+const data = require('../fin105.js')()
+// const data = require('../fin105-part.js')()
+// const data = require('../fin105-tiny.js')()
 const rows = data.split('\n')
-const values = rows.slice(0).map(b => b.split(',')).map(b => b.slice(0, -1))
+const values = rows.slice(1).map(b => b.split(','))
+
 const dataTable = converter.toDataTable(values)
 const { curry } = require('ramda')
 
@@ -19,18 +21,11 @@ import MultiChart from '../stories/MultiChart'
 const { numericChart } = require('../viz/numeric-chart')
 const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
-const { rank } = require('../model/sorter')
 
 const chartFn = (column) => {
-  if (classifier.isBooleanArray(column)) return booleanChart
-  if (classifier.isNumberArray(column)) return numericChart
+  if (isBooleanArray(column)) return booleanChart
+  if (isNumberArray(column)) return numericChart
   return categoricalChart
-}
-
-const dataFn = (column) => {
-  if (classifier.isBooleanArray(column)) return converter.toBooleanArray(column)
-  if (classifier.isNumberArray(column)) return converter.toNumberArray(column)
-  return column
 }
 
 class App extends Component {
@@ -39,8 +34,7 @@ class App extends Component {
     // const height = table.height(dataData)
     // const ordered = (i) => height - i
 
-    const a = rank(table.column(dataData, (i) => i, 10))
-    const ordered = (i) => a[i]
+    const ordered = table.byColumn(dataData, 3)
 
     const c = curry(table.column)(dataData, ordered)
 
@@ -49,8 +43,7 @@ class App extends Component {
     var configs = []
     for (var i = 0; i < table.width(dataData); i++) {
       const column = c(i)
-      const name = table.row(dataTable, (i) => i, 0)[i]
-      // const column = c(i).slice(1)
+      const name = table.row(dataTable, i => i, 0)[i]
       // const name = c(i)[0]
       const cf = chartFn(column)
       const config = {className: name, top: 20, left: 50 * i}
@@ -58,7 +51,7 @@ class App extends Component {
         config['keys'] = uniq(column).sort()
       }
       charts.push(cf)
-      datas.push(dataFn(column))
+      datas.push(column)
       configs.push(config)
     }
     return (
