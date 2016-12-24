@@ -12,6 +12,7 @@ const data = require('../fin105.js')()
 // const data = require('../fin105-part.js')()
 // const data = require('../fin105-tiny.js')()
 const rows = data.split('\n')
+const names = rows[0].split(',')
 const values = rows.slice(1).map(b => b.split(','))
 
 const dataTable = converter.toDataTable(values)
@@ -30,21 +31,16 @@ const chartFn = (column) => {
 
 class App extends Component {
   render() {
-    let dataData = dataTable.slice(1)
-    // const height = table.height(dataData)
-    // const ordered = (i) => height - i
+    const ordered = table.byColumn(dataTable, 3)
 
-    const ordered = table.byColumn(dataData, 3)
-
-    const c = curry(table.column)(dataData, ordered)
+    const c = curry(table.column)(dataTable, ordered)
 
     var charts = []
     var datas = []
     var configs = []
-    for (var i = 0; i < table.width(dataData); i++) {
+    for (var i = 0; i < table.width(dataTable); i++) {
       const column = c(i)
-      const name = table.row(dataTable, i => i, 0)[i]
-      // const name = c(i)[0]
+      const name = names[i]
       const cf = chartFn(column)
       const config = {className: name, top: 20, left: 50 * i}
       if (cf === categoricalChart) {

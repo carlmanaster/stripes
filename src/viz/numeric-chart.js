@@ -1,5 +1,6 @@
 const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
+const { niceNumber } = require('../utils/nice-number')
 
 const xStandard        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? origin : scale(d)
 const xPositive        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? left : scale(d)
@@ -19,6 +20,7 @@ const rangeJaggedRight = (left, w) => [left, left + w - 10]
 
 const scaleStandard    = (scale, max) => scale(0)
 const scaleJaggedRight = (scale, max) => scale(max)
+
 
 const aroundZero = {
   xFn:      xStandard,
@@ -82,6 +84,8 @@ const chart = (functions, config, g, data) => {
     .style('y',     (d, i) => top + i)
     .style('x',     xFn(scale, origin, left))
     .style('width', widthFn(scale, origin, left, w))
+    .append('svg:title')
+    .text((d) => config.className + ': ' + (d === null ? 'null' : niceNumber(d)))
 }
 
 const pickFunctions = (min, max) => {
