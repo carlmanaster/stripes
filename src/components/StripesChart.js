@@ -34,6 +34,8 @@ const reduce = (c, dataTable, columnNames) => {
 }
 
 class StripesChart extends Component {
+  displayName: 'StripesChart'
+
   propTypes: {
     dataTable: PropTypes.array.isRequired,
     columnNames: PropTypes.array.isRequired,
@@ -43,8 +45,9 @@ class StripesChart extends Component {
   setContext() {
     const { dataTable } = this.props
     return d3.select(this.refs.chart).append('svg')
+    .attr('id', 'should-be-a-prop')
     .attr('width', table.width(dataTable) * 50)
-    .attr('height', table.height(dataTable))
+    .attr('height', table.height(dataTable) + 50)
     .append('g')
   }
 
@@ -59,8 +62,22 @@ class StripesChart extends Component {
   }
 
   componentDidMount() {
+    this.doThings()
+  }
+
+  componentDidUpdate() {
+    this.updateThings()
+  }
+
+  doThings() {
     const g = this.setContext();
     this.drawChart(g)
+  }
+
+  updateThings() {
+    d3.select(this.refs.chart).selectAll('svg').remove()
+    const g = this.setContext();
+    this.drawChart(g);
   }
 
   render() {
