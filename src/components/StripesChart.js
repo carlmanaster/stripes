@@ -1,7 +1,7 @@
-import MultiChart from '../stories/MultiChart'
-
 const React = require('react')
 const { Component, PropTypes } = React
+const FauxDom = require('react-faux-dom')
+const d3 = require('d3')
 const { curry, uniq } = require('ramda')
 const { isNumberArray, isBooleanArray } = require('../model/classifier')
 const { numericChart } = require('../viz/numeric-chart')
@@ -47,15 +47,17 @@ class StripesChart extends Component {
     const c = curry(table.column)(dataTable, ordered)
 
     const { charts, datas, configs } = reduce(c, dataTable, columnNames)
-    return (
-      <div className="App">
-        <MultiChart
-          chartFn={charts}
-          data={datas}
-          config={configs}
-        />
-      </div>
-    )
+    const node = FauxDom.createElement('svg')
+    const g = d3.select(node)
+    .attr('width', datas.length * 50)
+    .attr('height', 3000)
+    .append('g')
+
+    for (let i = 0; i < datas.length; i++) {
+      charts[i](g, datas[i], configs[i])
+    }
+
+    return node.toReact()
   }
 }
 
