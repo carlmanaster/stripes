@@ -1,6 +1,5 @@
 const React = require('react')
 const { Component, PropTypes } = React
-const FauxDom = require('react-faux-dom')
 const d3 = require('d3')
 const { curry, uniq } = require('ramda')
 const { isNumberArray, isBooleanArray } = require('../model/classifier')
@@ -41,23 +40,33 @@ class StripesChart extends Component {
     sortColumn: PropTypes.number
   }
 
-  render() {
+  setContext() {
+    const { dataTable } = this.props
+    return d3.select(this.refs.chart).append('svg')
+    .attr('width', table.width(dataTable) * 50)
+    .attr('height', table.height(dataTable))
+    .append('g')
+  }
+
+  drawChart(g) {
     const { dataTable, columnNames, sortColumn } = this.props
     const ordered = table.byColumn(dataTable, sortColumn)
     const c = curry(table.column)(dataTable, ordered)
-
     const { charts, datas, configs } = reduce(c, dataTable, columnNames)
-    const node = FauxDom.createElement('svg')
-    const g = d3.select(node)
-    .attr('width', datas.length * 50)
-    .attr('height', 3000)
-    .append('g')
-
     for (let i = 0; i < datas.length; i++) {
       charts[i](g, datas[i], configs[i])
     }
+  }
 
-    return node.toReact()
+  componentDidMount() {
+    const g = this.setContext();
+    this.drawChart(g)
+  }
+
+  render() {
+    return (
+      <div ref='chart'></div>
+    )
   }
 }
 
