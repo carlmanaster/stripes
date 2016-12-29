@@ -13,7 +13,8 @@ const _nice = (n) => {
 }
 
 const niceNumber = (n) => {
-  if (n < 0) return '-' + _nice(-n)
+  if (n === null) return `null`
+  if (n < 0) return `-` + _nice(-n)
   return _nice(n)
 }
 

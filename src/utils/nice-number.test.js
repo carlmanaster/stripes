@@ -1,6 +1,10 @@
 const { niceNumber } = require(`./nice-number`)
 
 describe(`nice-number`, () => {
+  it(`should return 'null' for null`, () => {
+    expect(niceNumber(null)).toBe(`null`)
+  })
+
   it(`should use exponential notation for values < 0.001`, () => {
     expect(niceNumber(0.00091)).toBe(`9.1e-4`)
   })
