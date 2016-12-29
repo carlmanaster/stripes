@@ -2,10 +2,10 @@ const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { niceNumber } = require('../utils/nice-number')
 
-const xStandard        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? origin : scale(d)
-const xPositive        = (scale, origin, left)    => (d)    => d === null ? left : d > 0 ? left : scale(d)
-const xJaggedLeft      = (scale, origin, left)    => (d, i) => d === null ? left : left + i % 4
-const xJaggedRight     = (scale, origin, left)    => (d)    => d === null ? left : scale(d)
+const xStandard        = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
+const xPositive        = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? 0 : scale(d)
+const xJaggedLeft      = (scale, origin) => (d, i) => d === null ? 0 : i % 4
+const xJaggedRight     = (scale, origin) => (d)    => d === null ? 0 : scale(d)
 
 const widthStandard    = (scale, origin, left, w) => (d)    => d === null ? w : Math.abs(scale(d) - origin)
 const widthJaggedLeft  = (scale, origin, left, w) => (d, i) => d === null ? w : scale(d) - left - (i % 4)
@@ -72,7 +72,7 @@ const chart = (functions, config, g, data) => {
   const top  = config.top || 0
   const myG = g.append('g')
    .classed(className, true)
-   .style('width', 5)
+   .attr('transform', () => `translate(${left}, ${top})`)
 
   myG.selectAll('rect')
     .data(data)
@@ -81,8 +81,8 @@ const chart = (functions, config, g, data) => {
     .classed('null', (d) => d === null)
     .classed('numeric-positive', (d) => d > 0)
     .classed('numeric-negative', (d) => d < 0)
-    .style('y',     (d, i) => top + i)
-    .style('x',     xFn(scale, origin, left))
+    .style('y',     (d, i) => i)
+    .style('x',     xFn(scale, origin))
     .style('width', widthFn(scale, origin, left, w))
     .append('svg:title')
     .text((d) => config.name + ': ' + niceNumber(d))
