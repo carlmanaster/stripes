@@ -11,7 +11,7 @@ const categoricalChart = (g, data, config = {}) => {
 
   const myG = g.append('g')
    .classed(className, true)
-   .attr('transform', (d, i) => `translate(${left}, ${top})`)
+   .attr('transform', () => `translate(${left}, ${top})`)
 
   myG.selectAll('rect')
     .data(data)
