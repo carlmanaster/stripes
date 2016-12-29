@@ -6,19 +6,21 @@ const categoricalChart = (g, data, config = {}) => {
   const width     = config.width || DEFAULT_COLUMN_WIDTH
   const keys      = config.keys  || []
   const className = config.className
-  const barWidth  = Math.max(2, width / keys.length)
   const increment = width / keys.length
+  const barWidth  = Math.max(2, increment)
 
   const myG = g.append('g')
-   .classed(className, true);
+   .classed(className, true)
+   .attr('transform', (d, i) => `translate(${left}, ${top})`)
+
   myG.selectAll('rect')
     .data(data)
     .enter().append('rect')
     .classed('stripe', true)
     .classed('null',        (d)    => d === null)
     .classed('categorical', (d)    => d !== null)
-    .style('y',             (d, i) => top + i)
-    .style('x',             (d)    => d === null ? left  : left + keys.indexOf(d) * increment)
+    .style('y',             (d, i) => i)
+    .style('x',             (d)    => d === null ? 0  : keys.indexOf(d) * increment)
     .style('width',         (d)    => d === null ? width : barWidth - 1)
     .append('svg:title')
     .text(                  (d)    => config.name + ': ' + (d === null ? 'null' : d))

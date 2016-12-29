@@ -85,7 +85,7 @@ const chart = (functions, config, g, data) => {
     .style('x',     xFn(scale, origin, left))
     .style('width', widthFn(scale, origin, left, w))
     .append('svg:title')
-    .text((d) => config.name + ': ' + (d === null ? 'null' : niceNumber(d)))
+    .text((d) => config.name + ': ' + niceNumber(d))
 }
 
 const pickFunctions = (min, max) => {
