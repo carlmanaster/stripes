@@ -2,21 +2,19 @@ const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { niceNumber } = require('../utils/nice-number')
 
-const xStandard        = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
-const xPositive        = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? 0 : scale(d)
-const xJaggedLeft      = (scale, origin) => (d, i) => d === null ? 0 : i % 4
-const xJaggedRight     = (scale, origin) => (d)    => d === null ? 0 : scale(d)
+const xStandard         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
+const xPositive         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? 0 : scale(d)
+const xJaggedLeft       = (scale, origin) => (d, i) => d === null ? 0 : i % 4
 
-const widthStandard    = (scale, origin, left, w) => (d)    => d === null ? w : Math.abs(scale(d) - origin)
-const widthJaggedLeft  = (scale, origin, left, w) => (d, i) => d === null ? w : scale(d) - origin + 6 - i % 4
-const widthJaggedRight = (scale, origin, left, w) => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
+const widthStandard     = (scale, origin, w) => (d)    => d === null ? w : Math.abs(scale(d) - origin)
+const widthJagged       = (scale, origin, w) => (d, i) => d === null ? w : Math.abs(scale(d) - origin) + 6 - i % 4
 
-const domainStandard   = (min, max) => [min, max]
-const domainNegative   = (min, max) => [min, 0]
+const domainStandard    = (min, max) => [min, max]
+const domainNegative    = (min, max) => [min, 0]
 
-const rangeStandard    = (left, w) => [left, left + w]
-const rangeJaggedLeft  = (left, w) => [left + 10, left + w]
-const rangeJaggedRight = (left, w) => [left, left + w - 10]
+const rangeStandard     = (left, w) => [left, left + w]
+const rangeJaggedLeft   = (left, w) => [left + 10, left + w]
+const rangeJaggedRight  = (left, w) => [left, left + w - 10]
 
 const originStandard    = (scale, min, max) => scale(0)
 const originJaggedLeft  = (scale, min, max) => scale(min)
@@ -48,15 +46,15 @@ const negative = {
 
 const jaggedLeft = {
   xFn:      xJaggedLeft,
-  widthFn:  widthJaggedLeft,
+  widthFn:  widthJagged,
   domainFn: domainStandard,
   rangeFn:  rangeJaggedLeft,
   originFn: originJaggedLeft
 }
 
 const jaggedRight = {
-  xFn:      xJaggedRight,
-  widthFn:  widthJaggedRight,
+  xFn:      xStandard,
+  widthFn:  widthJagged,
   domainFn: domainStandard,
   rangeFn:  rangeJaggedRight,
   originFn: originJaggedRight
@@ -83,7 +81,7 @@ const chart = (functions, config, g, data) => {
     .classed('numeric-negative', (d) => d < 0)
     .style('y',     (d, i) => i)
     .style('x',     xFn(scale, origin))
-    .style('width', widthFn(scale, origin, left, w))
+    .style('width', widthFn(scale, origin, w))
     .append('svg:title')
     .text((d) => config.name + ': ' + niceNumber(d))
 }
