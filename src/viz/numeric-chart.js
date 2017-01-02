@@ -8,7 +8,7 @@ const xJaggedLeft      = (scale, origin) => (d, i) => d === null ? 0 : i % 4
 const xJaggedRight     = (scale, origin) => (d)    => d === null ? 0 : scale(d)
 
 const widthStandard    = (scale, origin, left, w) => (d)    => d === null ? w : Math.abs(scale(d) - origin)
-const widthJaggedLeft  = (scale, origin, left, w) => (d, i) => d === null ? w : scale(d) - left - (i % 4)
+const widthJaggedLeft  = (scale, origin, left, w) => (d, i) => d === null ? w : scale(d) - origin + 6 - i % 4
 const widthJaggedRight = (scale, origin, left, w) => (d, i) => d === null ? w : origin - scale(d) + 6 - i % 4
 
 const domainStandard   = (min, max) => [min, max]
@@ -18,16 +18,16 @@ const rangeStandard    = (left, w) => [left, left + w]
 const rangeJaggedLeft  = (left, w) => [left + 10, left + w]
 const rangeJaggedRight = (left, w) => [left, left + w - 10]
 
-const scaleStandard    = (scale, max) => scale(0)
-const scaleJaggedRight = (scale, max) => scale(max)
-
+const originStandard    = (scale, min, max) => scale(0)
+const originJaggedLeft  = (scale, min, max) => scale(min)
+const originJaggedRight = (scale, min, max) => scale(max)
 
 const aroundZero = {
   xFn:      xStandard,
   widthFn:  widthStandard,
   domainFn: domainStandard,
   rangeFn:  rangeStandard,
-  scaleFn:  scaleStandard
+  originFn: originStandard
 }
 
 const positive = {
@@ -35,7 +35,7 @@ const positive = {
   widthFn:  widthStandard,
   domainFn: domainStandard,
   rangeFn:  rangeStandard,
-  scaleFn:  scaleStandard
+  originFn: originStandard
 }
 
 const negative = {
@@ -43,7 +43,7 @@ const negative = {
   widthFn:  widthStandard,
   domainFn: domainNegative,
   rangeFn:  rangeStandard,
-  scaleFn:  scaleStandard
+  originFn: originStandard
 }
 
 const jaggedLeft = {
@@ -51,7 +51,7 @@ const jaggedLeft = {
   widthFn:  widthJaggedLeft,
   domainFn: domainStandard,
   rangeFn:  rangeJaggedLeft,
-  scaleFn:  scaleStandard
+  originFn: originJaggedLeft
 }
 
 const jaggedRight = {
@@ -59,16 +59,16 @@ const jaggedRight = {
   widthFn:  widthJaggedRight,
   domainFn: domainStandard,
   rangeFn:  rangeJaggedRight,
-  scaleFn:  scaleJaggedRight
+  originFn: originJaggedRight
 }
 
 const chart = (functions, config, g, data) => {
-  const { xFn, widthFn, domainFn, rangeFn, scaleFn } = functions
+  const { xFn, widthFn, domainFn, rangeFn, originFn } = functions
   const { w, left, min, max, className } = config
   const scale = d3.scaleLinear()
     .domain(domainFn(min, max))
     .range(rangeFn(left, w))
-  const origin = scaleFn(scale, max)
+  const origin = originFn(scale, min, max)
   const top  = config.top || 0
   const myG = g.append('g')
    .classed(className, true)
