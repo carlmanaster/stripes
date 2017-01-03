@@ -14,14 +14,14 @@ const chartFn = (column) => {
   return categoricalChart
 }
 
-const reduceOne = (c, name, i) => {
-  const column = c(i)
+const reduceOne = (c, name, index) => {
+  const column = c(index)
   const cf = chartFn(column)
-  const config = {name, className: name, top: 20, left: 50 * i}
+  const config = {name, className: name, top: 20, left: 50 * index}
   if (cf === categoricalChart) {
     config['keys'] = uniq(column).sort()
   }
-  return { cf, column, config }
+  return { index, cf, column, config }
 }
 
 const reduce = (c, dataTable, columnNames) => {
@@ -30,6 +30,31 @@ const reduce = (c, dataTable, columnNames) => {
     packets.push(reduceOne(c, columnNames[i], i))
   }
   return packets
+}
+
+const drawTitle = (g, name, left, click) => {
+  const myG = g.append('g')
+   .classed('title', true)
+   .attr('transform', () => `translate(${left}, 15)`)
+   .on('click', click)
+   .style('cursor', 'pointer') // TODO: move to css
+
+  myG.selectAll('rect')
+    .data([0])
+    .enter().append('rect')
+    .classed('stripe', true)
+    .style('x', 0)
+    .style('y', -10)
+    .style('width', 40)
+    .style('height', 10)
+    .style('fill-opacity', 0)
+
+  myG.selectAll('text')
+    .data([name])
+    .enter().append('text')
+    .text((d) => d)
+    .style('font-family', 'sans-serif')
+    .style('font-size', '9px')
 }
 
 class StripesChart extends Component {
@@ -50,12 +75,17 @@ class StripesChart extends Component {
     .append('g')
   }
 
-  drawChart(g) {
+  drawChart(g, realSortColumn) {
     const { dataTable, columnNames, sortColumn } = this.props
-    const ordered = table.byColumn(dataTable, sortColumn)
+    realSortColumn = realSortColumn || sortColumn
+    const ordered = table.byColumn(dataTable, realSortColumn)
     const c = curry(table.column)(dataTable, ordered)
     const packets = reduce(c, dataTable, columnNames)
-    packets.forEach(({ cf, column, config }) => {
+    packets.forEach(({ index, cf, column, config }) => {
+      const click = () => {
+        this.updateThings(index)
+      }
+      drawTitle(g, config.name, config.left, click)
       cf(g, column, config)
     })
   }
@@ -73,10 +103,10 @@ class StripesChart extends Component {
     this.drawChart(g)
   }
 
-  updateThings() {
+  updateThings(index) {
     d3.select(this.refs.chart).selectAll('svg').remove()
     const g = this.setContext();
-    this.drawChart(g);
+    this.drawChart(g, index);
   }
 
   render() {
