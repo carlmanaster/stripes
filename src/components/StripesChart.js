@@ -14,23 +14,22 @@ const chartFn = (column) => {
   return categoricalChart
 }
 
-const reduce = (c, dataTable, columnNames) => {
-  var charts = []
-  var datas = []
-  var configs = []
-  for (var i = 0; i < table.width(dataTable); i++) {
-    const column = c(i)
-    const name = columnNames[i]
-    const cf = chartFn(column)
-    const config = {name, className: name, top: 20, left: 50 * i}
-    if (cf === categoricalChart) {
-      config['keys'] = uniq(column).sort()
-    }
-    charts.push(cf)
-    datas.push(column)
-    configs.push(config)
+const reduceOne = (c, name, i) => {
+  const column = c(i)
+  const cf = chartFn(column)
+  const config = {name, className: name, top: 20, left: 50 * i}
+  if (cf === categoricalChart) {
+    config['keys'] = uniq(column).sort()
   }
-  return { charts, datas, configs }
+  return { cf, column, config }
+}
+
+const reduce = (c, dataTable, columnNames) => {
+  var packets = []
+  for (var i = 0; i < table.width(dataTable); i++) {
+    packets.push(reduceOne(c, columnNames[i], i))
+  }
+  return packets
 }
 
 class StripesChart extends Component {
@@ -55,10 +54,10 @@ class StripesChart extends Component {
     const { dataTable, columnNames, sortColumn } = this.props
     const ordered = table.byColumn(dataTable, sortColumn)
     const c = curry(table.column)(dataTable, ordered)
-    const { charts, datas, configs } = reduce(c, dataTable, columnNames)
-    for (let i = 0; i < datas.length; i++) {
-      charts[i](g, datas[i], configs[i])
-    }
+    const packets = reduce(c, dataTable, columnNames)
+    packets.forEach(({ cf, column, config }) => {
+      cf(g, column, config)
+    })
   }
 
   componentDidMount() {
