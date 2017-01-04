@@ -2,6 +2,10 @@
   height: 1px;
 }
 
+.stripe:hover {
+  fill: black;
+}
+
 .numeric-positive {
   fill: #59ce4e;
 }
