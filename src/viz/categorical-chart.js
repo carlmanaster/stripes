@@ -1,4 +1,5 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
+const { ensureG } = require('./utils')
 
 const categoricalChart = (g, data, config = {}) => {
   const top       = config.top   || 0
@@ -9,14 +10,26 @@ const categoricalChart = (g, data, config = {}) => {
   const increment = width / keys.length
   const barWidth  = Math.max(2, increment)
 
-  const myG = g.append('g')
-   .classed(className, true)
-   .attr('transform', () => `translate(${left}, ${top})`)
+  const myG = ensureG(g, className, left, top)
 
-  myG.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
+  myG.selectAll('title').remove()
+
+  const update = myG.selectAll('rect')
+    .data(data, (d, i) => i)
+
+  const enter = update.enter()
+  enter
+    .append('rect') // TODO: could do as well with a line.  cheaper?
     .classed('stripe', true)
+    .classed('null',        (d)    => d === null)
+    .classed('categorical', (d)    => d !== null)
+    .style('y',             (d, i) => i)
+    .style('x',             (d)    => d === null ? 0  : keys.indexOf(d) * increment)
+    .style('width',         (d)    => d === null ? width : barWidth - 1)
+    .append('svg:title')
+    .text(                  (d)    => config.name + ': ' + (d === null ? 'null' : d))
+
+  update
     .classed('null',        (d)    => d === null)
     .classed('categorical', (d)    => d !== null)
     .style('y',             (d, i) => i)

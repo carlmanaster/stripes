@@ -1,6 +1,7 @@
 const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { niceNumber } = require('../utils/nice-number')
+const { ensureG } = require('./utils')
 
 const xStandard         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
 const xPositive         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? 0 : scale(d)
@@ -68,13 +69,18 @@ const chart = (functions, config, g, data) => {
     .range(rangeFn(left, w))
   const origin = originFn(scale, min, max)
   const top  = config.top || 0
-  const myG = g.append('g')
-   .classed(className, true)
-   .attr('transform', () => `translate(${left}, ${top})`)
 
-  myG.selectAll('rect')
-    .data(data)
-    .enter().append('rect')
+  const myG = ensureG(g, className, left, top)
+
+  myG.selectAll('title').remove()
+
+  const update = myG.selectAll('rect')
+    // .data(data)
+    .data(data, (d, i) => i)
+
+  const enter = update.enter()
+  enter
+    .append('rect') // TODO: could do as well with a line.  cheaper?
     .classed('stripe', true)
     .classed('null', (d) => d === null)
     .classed('numeric-positive', (d) => d > 0)
@@ -84,6 +90,18 @@ const chart = (functions, config, g, data) => {
     .style('width', widthFn(scale, origin, w))
     .append('svg:title')
     .text((d) => config.name + ': ' + niceNumber(d))
+
+  update
+    // .transition()
+    .style('y',     (d, i) => i)
+    .style('x',     xFn(scale, origin))
+    .style('width', widthFn(scale, origin, w))
+    .append('svg:title')
+    .text((d) => config.name + ': ' + niceNumber(d))
+    // update.merge(enter).selectAll('rect')
+
+  // update.merge(enter).selectAll('rect')
+  //   .style('y',     (d, i) => i)
 }
 
 const pickFunctions = (min, max) => {

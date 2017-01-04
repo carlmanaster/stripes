@@ -64,15 +64,6 @@ class StripesChart extends Component {
     sortColumn: PropTypes.number
   }
 
-  setContext() {
-    const { dataTable } = this.props
-    return d3.select(this.refs.chart).append('svg')
-    .attr('id', 'should-be-a-prop')
-    .attr('width', table.width(dataTable) * 50)
-    .attr('height', table.height(dataTable) + 50)
-    .append('g')
-  }
-
   drawChart(g, realSortColumn) {
     const { dataTable, columnNames, sortColumn } = this.props
     realSortColumn = realSortColumn || sortColumn
@@ -96,14 +87,25 @@ class StripesChart extends Component {
     this.updateThings()
   }
 
+  setContext() {
+    const { dataTable } = this.props
+    return d3.select(this.refs.chart).append('svg')
+    .attr('id', 'should-be-a-prop')
+    .attr('width', table.width(dataTable) * 50)
+    .attr('height', table.height(dataTable) + 50)
+    .append('g')
+    .attr('id', 'root')
+  }
+
   doThings() {
     const g = this.setContext();
     this.drawChart(g)
   }
 
   updateThings(index) {
-    d3.select(this.refs.chart).selectAll('svg').remove()
-    const g = this.setContext();
+    const g = d3.select(this.refs.chart)
+    .selectAll('svg')
+    .selectAll('#root')
     this.drawChart(g, index);
   }
 
