@@ -37,12 +37,10 @@ const drawTitle = (g, name, left, click) => {
    .classed('title', true)
    .attr('transform', () => `translate(${left}, 15)`)
    .on('click', click)
-   .style('cursor', 'pointer') // TODO: move to css
 
   myG.selectAll('rect')
     .data([0])
     .enter().append('rect')
-    .classed('stripe', true)
     .style('x', 0)
     .style('y', -10)
     .style('width', 40)
@@ -52,9 +50,9 @@ const drawTitle = (g, name, left, click) => {
   myG.selectAll('text')
     .data([name])
     .enter().append('text')
+    .text((d) => d.substr(0, 7))
+    .append('svg:title')
     .text((d) => d)
-    .style('font-family', 'sans-serif')
-    .style('font-size', '9px')
 }
 
 class StripesChart extends Component {
