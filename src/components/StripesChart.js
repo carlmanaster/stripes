@@ -1,7 +1,7 @@
 const React = require('react')
 const { Component, PropTypes } = React
 const d3 = require('d3')
-const { curry, uniq } = require('ramda')
+const { curry, uniq, clone } = require('ramda')
 const { isNumberArray, isBooleanArray } = require('../model/classifier')
 const { numericChart } = require('../viz/numeric-chart')
 const { categoricalChart } = require('../viz/categorical-chart')
@@ -65,11 +65,11 @@ class StripesChart extends Component {
   }
 
   drawChart(g, realSortColumn) {
-    const { dataTable, columnNames, sortColumn } = this.props
+    const { columnNames, sortColumn } = this.props
     realSortColumn = realSortColumn || sortColumn
-    const ordered = table.byColumn(dataTable, realSortColumn)
-    const c = curry(table.column)(dataTable, ordered)
-    const packets = reduce(c, dataTable, columnNames)
+    const ordered = table.byColumn(this.dataTable, realSortColumn)
+    const c = curry(table.column)(this.dataTable, ordered)
+    const packets = reduce(c, this.dataTable, columnNames)
     packets.forEach(({ index, cf, column, config }) => {
       const click = () => {
         this.updateThings(index)
@@ -80,6 +80,7 @@ class StripesChart extends Component {
   }
 
   componentDidMount() {
+    this.dataTable = clone(this.props.dataTable)
     this.doThings()
   }
 

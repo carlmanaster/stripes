@@ -1,7 +1,7 @@
- - do the Update/Enter thing
- - transition
+ √ do the Update/Enter thing
+ √ apply to numeric, categorical, and boolean charts
  - cumulative sort
- - apply to numeric, categorical, and boolean charts
+ - transition
 
 For transitions, you need a key function eg
   data(d => d.subject, d => d.name)

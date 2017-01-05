@@ -34,11 +34,17 @@ const byColumn = (data, index) => {
   return n => order[n]
 }
 
+const sortedByColumn = (data, index) => {
+  const order = byColumn(data, index)
+  return mapIndexed((x, i) => row(data, order, i), data)
+}
+
 module.exports = {
   width,
   height,
   row,
   column,
   substituteColumn,
-  byColumn
+  byColumn,
+  sortedByColumn
 }

@@ -66,6 +66,12 @@ describe('table', () => {
     })
   })
 
+  describe('sortedByColumn', () => {
+    it('should return a new data table', () => {
+      const sorted = table.sortedByColumn(data, 1)
+      expect(table.column(sorted, standardOrder, 0)).toEqual([2, 3, 1])
+    })
+  })
 
   describe('curried', () => {
     const r = curry(table.row)(data, rearranged)
