@@ -60,15 +60,12 @@ class StripesChart extends Component {
 
   propTypes: {
     dataTable: PropTypes.array.isRequired,
-    columnNames: PropTypes.array.isRequired,
-    sortColumn: PropTypes.number
+    columnNames: PropTypes.array.isRequired
   }
 
-  drawChart(g, realSortColumn) {
-    const { columnNames, sortColumn } = this.props
-    realSortColumn = realSortColumn || sortColumn
-    const ordered = table.byColumn(this.dataTable, realSortColumn)
-    const c = curry(table.column)(this.dataTable, ordered)
+  drawChart(g) {
+    const { columnNames } = this.props
+    const c = curry(table.column)(this.dataTable, i => i)
     const packets = reduce(c, this.dataTable, columnNames)
     packets.forEach(({ index, cf, column, config }) => {
       const click = () => {
@@ -89,11 +86,11 @@ class StripesChart extends Component {
   }
 
   setContext() {
-    const { dataTable } = this.props
+    // const { dataTable } = this.props
     return d3.select(this.refs.chart).append('svg')
     .attr('id', 'should-be-a-prop')
-    .attr('width', table.width(dataTable) * 50)
-    .attr('height', table.height(dataTable) + 50)
+    .attr('width', table.width(this.dataTable) * 50)
+    .attr('height', table.height(this.dataTable) + 50)
     .append('g')
     .attr('id', 'root')
   }
@@ -104,10 +101,11 @@ class StripesChart extends Component {
   }
 
   updateThings(index) {
+    this.dataTable = table.sortedByColumn(this.dataTable, index)
     const g = d3.select(this.refs.chart)
     .selectAll('svg')
     .selectAll('#root')
-    this.drawChart(g, index);
+    this.drawChart(g);
   }
 
   render() {

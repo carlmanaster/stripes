@@ -7,8 +7,8 @@ describe('sorter', () => {
     expect(rank(column)).toEqual(expected)
   })
   it('should be stable', () => {
-    const column = [5, 1, 1, 1, 4]
-    const expected = [1, 2, 3, 4, 0]
+    const column = [5, 1, 1, 1, 4, 4, 4, 5, 1, 4, 5, 1, 1, 4, 1, 5, 5]
+    const expected = [1, 2, 3, 8, 11, 12, 14, 4, 5, 6, 9, 13, 0, 7, 10, 15, 16]
     expect(rank(column)).toEqual(expected)
   })
   it('should sort numerically', () => {

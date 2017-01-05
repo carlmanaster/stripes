@@ -15,7 +15,7 @@ const dataTable = converter.toDataTable(values)
 class App extends Component {
   constructor(props) {
      super(props);
-     this.state = {sortColumn: 0};
+     this.state = {};
    }
 
   render() {
@@ -24,7 +24,6 @@ class App extends Component {
         <StripesChart
           dataTable={dataTable}
           columnNames={names}
-          sortColumn={this.state.sortColumn}
         />
       </div>
     )
