@@ -92,7 +92,6 @@ const chart = (functions, config, g, data) => {
     .text((d) => config.name + ': ' + niceNumber(d))
 
   update
-    // .transition()
     .classed('null', (d) => d === null)
     .classed('numeric-positive', (d) => d > 0)
     .classed('numeric-negative', (d) => d < 0)

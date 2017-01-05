@@ -1,4 +1,4 @@
-const { identity, times, zip, sort, prop, map, pipe } = require('ramda')
+const { identity, times, zip, sort, map, pipe } = require('ramda')
 
 const stableSort = (pairs) => {
   const comparator = (a, b) => {
