@@ -93,6 +93,9 @@ const chart = (functions, config, g, data) => {
 
   update
     // .transition()
+    .classed('null', (d) => d === null)
+    .classed('numeric-positive', (d) => d > 0)
+    .classed('numeric-negative', (d) => d < 0)
     .style('y',     (d, i) => i)
     .style('x',     xFn(scale, origin))
     .style('width', widthFn(scale, origin, w))
