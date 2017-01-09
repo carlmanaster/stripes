@@ -7,7 +7,6 @@ import '../viz/stripes.css'
 const d3 = require('d3')
 const FileInput = require('react-file-input')
 const converter = require('../model/converter')
-const table = require('../model/table')
 
 const parse = (data) => {
   if (!data) return

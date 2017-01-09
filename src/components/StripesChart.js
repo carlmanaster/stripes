@@ -55,6 +55,11 @@ const drawTitle = (g, name, left, click) => {
     .text((d) => d)
 }
 
+
+// const brushed = () => {
+//   console.log('brushed')
+// }
+
 class StripesChart extends Component {
   displayName: 'StripesChart'
 
@@ -74,6 +79,10 @@ class StripesChart extends Component {
       drawTitle(g, config.name, config.left, click)
       cf(g, column, config)
     })
+
+    // g
+    //   .attr('class', 'brush')
+    //   .call(d3.brushY().on('brush', brushed))
   }
 
   componentDidMount() {
@@ -96,16 +105,16 @@ class StripesChart extends Component {
   }
 
   doThings() {
-    const g = this.setContext();
+    const g = this.setContext()
     this.drawChart(g)
   }
 
   updateThings(index) {
     this.dataTable = table.sortedByColumn(this.dataTable, index)
     const g = d3.select(this.refs.chart)
-    .selectAll('svg')
-    .selectAll('#root')
-    this.drawChart(g);
+      .selectAll('svg')
+      .selectAll('#root')
+    this.drawChart(g)
   }
 
   render() {
