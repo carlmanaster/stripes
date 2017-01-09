@@ -11,7 +11,7 @@ const converter = require('../model/converter')
 const parse = (data) => {
   if (!data) return
 
-  const rows = data.split('\r\n') // need to handle all line endings
+  const rows = data.split(/\r?\n/) // need to handle all line endings
   if (!rows[rows.length - 1]) rows.splice(rows.length - 1)
 
   const names = rows[0].split(',')
