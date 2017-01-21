@@ -7,23 +7,20 @@ import '../viz/stripes.css'
 const d3 = require('d3')
 const FileInput = require('react-file-input')
 const converter = require('../model/converter')
+const { height } = require('../model/table')
+const { ofLength, selectRange } = require('../model/selection')
 
-const parse = (data) => {
+const parse = data => {
   if (!data) return
 
-  const rows = data.split(/\r?\n/) // need to handle all line endings
+  const rows = data.split(/\r?\n/)
   if (!rows[rows.length - 1]) rows.splice(rows.length - 1)
 
   const names = rows[0].split(',')
   const values = rows.slice(1).map(b => b.split(','))
   const dataTable = converter.toDataTable(values)
-  return { dataTable, names }
-}
-
-const previewCsvUrl = (csvUrl, cb) => {
-  d3.text(csvUrl, (t) => {
-    cb(t)
-  })
+  const selection = selectRange(ofLength(height(dataTable)), 5, 30)
+  return { dataTable, names, selection }
 }
 
 let app
@@ -37,19 +34,13 @@ class App extends Component {
   }
 
   handleChange(event) {
-    const cb = (data) => {
-      app.setState({data})
-    }
-
     const file = event.target.files[0]
-    if (file) {
-      var reader = new FileReader();
-        reader.onloadend = function(evt) {
-          var dataUrl = evt.target.result;
-          previewCsvUrl(dataUrl, cb);
-      };
-     reader.readAsDataURL(file);
-    }
+    if (!file) return
+
+    const cb = data => app.setState({data})
+    const reader = new FileReader()
+    reader.onloadend = (evt) => d3.text(evt.target.result, cb)
+    reader.readAsDataURL(file)
   }
 
   render() {
@@ -69,12 +60,13 @@ class App extends Component {
       )
     }
 
-    const { dataTable, names } = parse(app.state.data)
+    const { dataTable, names, selection } = parse(app.state.data)
     return (
       <div className='App'>
         <StripesChart
           dataTable={dataTable}
           columnNames={names}
+          selection={selection}
         />
       </div>
     )

@@ -65,7 +65,8 @@ class StripesChart extends Component {
 
   propTypes: {
     dataTable: PropTypes.array.isRequired,
-    columnNames: PropTypes.array.isRequired
+    columnNames: PropTypes.array.isRequired,
+    selection: PropTypes.array.isRequired
   }
 
   drawChart(g) {
