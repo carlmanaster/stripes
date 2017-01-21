@@ -39,9 +39,6 @@ const numericStories = () => {
   .add('sorted', () => (
     <Chart chartFn={numericChart} data={orderedData}/>
   ))
-  .add('with x-y offset', () => (
-    <Chart chartFn={numericChart} data={orderedData} config={{top: 20, left: 60}}/>
-  ))
   .add('with different width', () => (
     <Chart chartFn={numericChart} data={orderedData} config={{width: 60}}/>
   ))
