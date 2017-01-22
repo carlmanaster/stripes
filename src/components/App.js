@@ -7,8 +7,6 @@ import '../viz/stripes.css'
 const d3 = require('d3')
 const FileInput = require('react-file-input')
 const converter = require('../model/converter')
-const { height } = require('../model/table')
-const { ofLength, selectRange } = require('../model/selection')
 
 const parse = data => {
   if (!data) return
@@ -19,8 +17,7 @@ const parse = data => {
   const names = rows[0].split(',')
   const values = rows.slice(1).map(b => b.split(','))
   const dataTable = converter.toDataTable(values)
-  const selection = selectRange(ofLength(height(dataTable)), 5, 30)
-  return { dataTable, names, selection }
+  return { dataTable, names }
 }
 
 let app

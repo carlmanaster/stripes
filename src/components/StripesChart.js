@@ -7,6 +7,7 @@ const { numericChart } = require('../viz/numeric-chart')
 const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
 const table = require('../model/table')
+const { ofLength, selectRange, sortedBy } = require('../model/selection')
 
 const chartFn = (column) => {
   if (isBooleanArray(column)) return booleanChart
@@ -55,18 +56,16 @@ const drawTitle = (g, name, left, click) => {
     .text((d) => d)
 }
 
-
-// const brushed = () => {
-//   console.log('brushed')
-// }
-
 class StripesChart extends Component {
   displayName: 'StripesChart'
 
   propTypes: {
     dataTable: PropTypes.array.isRequired,
-    columnNames: PropTypes.array.isRequired,
-    selection: PropTypes.array.isRequired
+    columnNames: PropTypes.array.isRequired
+  }
+
+  drawSelection(g) {
+
   }
 
   drawChart(g) {
@@ -80,14 +79,11 @@ class StripesChart extends Component {
       drawTitle(g, config.name, config.left, click)
       cf(g, column, config)
     })
-
-    // g
-    //   .attr('class', 'brush')
-    //   .call(d3.brushY().on('brush', brushed))
   }
 
   componentDidMount() {
     this.dataTable = clone(this.props.dataTable)
+    this.selection = selectRange(ofLength(table.height(this.dataTable)), 5, 30)
     this.doThings()
   }
 
@@ -96,7 +92,6 @@ class StripesChart extends Component {
   }
 
   setContext() {
-    // const { dataTable } = this.props
     return d3.select(this.refs.chart).append('svg')
     .attr('id', 'should-be-a-prop')
     .attr('width', table.width(this.dataTable) * 50)
@@ -107,14 +102,18 @@ class StripesChart extends Component {
 
   doThings() {
     const g = this.setContext()
+    this.drawSelection(g)
     this.drawChart(g)
   }
 
   updateThings(index) {
+    const rank = table.byColumn(this.dataTable, index)
     this.dataTable = table.sortedByColumn(this.dataTable, index)
+    this.selection = sortedBy(rank, this.selection)
     const g = d3.select(this.refs.chart)
       .selectAll('svg')
       .selectAll('#root')
+    this.drawSelection(g)
     this.drawChart(g)
   }
 
