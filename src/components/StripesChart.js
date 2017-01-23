@@ -65,7 +65,7 @@ class StripesChart extends Component {
   }
 
   drawSelection(g) {
-
+    console.log(this.selection)
   }
 
   drawChart(g) {

@@ -42,7 +42,7 @@ describe('selectRange', () => {
 
 describe('sortedBy', () => {
   it('sorts', () => {
-    const rank = [1, 3, 2, 4, 0]
+    const rank = i => [1, 3, 2, 4, 0][i]
     const s1 = [F, F, T, T, F]
     const s2 = sortedBy(rank, s1)
     const expected = [F, T, T, F, F]
