@@ -8,6 +8,8 @@ const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
 const table = require('../model/table')
 const { ofLength, selectRange, sortedBy } = require('../model/selection')
+const { ensureG } = require('../viz/utils')
+const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 
 const chartFn = (column) => {
   if (isBooleanArray(column)) return booleanChart
@@ -66,6 +68,28 @@ class StripesChart extends Component {
 
   drawSelection(g) {
     console.log(this.selection)
+    const top   = 20
+    const left  = 0
+    const width = 50 * table.width(this.dataTable)
+
+    const myG = ensureG(g, 'selection', left, top)
+    const update = myG.selectAll('line')
+      .data(this.selection, (d, i) => i)
+
+    const enter = update.enter()
+    enter
+      .append('rect')
+      .classed('hilite', true)
+      .classed('selected', d => d)
+      .classed('unselected', d => !d)
+      .style('y',      (d, i) => i)
+      .style('x',      left)
+      .style('width',  width)
+      .style('height', 1)
+
+    update
+      .classed('selected', d => d)
+      .style('y',      (d, i) => i)
   }
 
   drawChart(g) {
