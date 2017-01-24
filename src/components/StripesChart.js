@@ -57,6 +57,8 @@ const drawTitle = (g, name, left, click) => {
     .text((d) => d)
 }
 
+let dragStart
+
 class StripesChart extends Component {
   displayName: 'StripesChart'
 
@@ -65,14 +67,21 @@ class StripesChart extends Component {
     columnNames: PropTypes.array.isRequired
   }
 
+  setSelection(selection) {
+    this.selection = selection
+    const g = d3.select(this.refs.chart)
+      .selectAll('svg')
+      .selectAll('#root')
+    this.drawSelection(g)
+  }
+
   drawSelection(g) {
-    console.log(this.selection)
     const top   = 20
     const left  = 0
     const width = 50 * table.width(this.dataTable)
 
     const myG = ensureG(g, 'selection', left, top)
-    const update = myG.selectAll('line')
+    const update = myG.selectAll('rect')
       .data(this.selection, (d, i) => i)
 
     const enter = update.enter()
@@ -85,9 +94,19 @@ class StripesChart extends Component {
       .style('x',      left)
       .style('width',  width)
       .style('height', 1)
+      .on('mousedown', (d, i) => {
+        dragStart = i
+        this.setSelection(ofLength(table.height(this.dataTable)))
+      })
+      .on('mouseup', (d, i) => {
+        const low = Math.min(dragStart, i)
+        const high = Math.max(dragStart, i)
+        this.setSelection(selectRange(ofLength(table.height(this.dataTable)), low, high))
+      })
 
     update
       .classed('selected', d => d)
+      .classed('unselected', d => !d)
       .style('y',      (d, i) => i)
   }
 
@@ -106,7 +125,7 @@ class StripesChart extends Component {
 
   componentDidMount() {
     this.dataTable = clone(this.props.dataTable)
-    this.selection = selectRange(ofLength(table.height(this.dataTable)), 5, 30)
+    this.selection = ofLength(table.height(this.dataTable))
     this.doThings()
   }
 
