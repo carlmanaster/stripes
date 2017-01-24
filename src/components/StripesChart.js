@@ -9,7 +9,6 @@ const { booleanChart } = require('../viz/boolean-chart')
 const table = require('../model/table')
 const { ofLength, selectRange, sortedBy } = require('../model/selection')
 const { ensureG } = require('../viz/utils')
-const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 
 const chartFn = (column) => {
   if (isBooleanArray(column)) return booleanChart
