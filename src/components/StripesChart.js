@@ -57,7 +57,7 @@ const drawTitle = (g, name, left, click) => {
     .text((d) => d)
 }
 
-let dragStart
+let dragStart = undefined
 
 class StripesChart extends Component {
   displayName: 'StripesChart'
@@ -99,6 +99,14 @@ class StripesChart extends Component {
         this.setSelection(ofLength(table.height(this.dataTable)))
       })
       .on('mouseup', (d, i) => {
+        const low = Math.min(dragStart, i)
+        const high = Math.max(dragStart, i)
+        dragStart = undefined
+        this.setSelection(selectRange(ofLength(table.height(this.dataTable)), low, high))
+      })
+
+      .on('mousemove', (d, i) => {
+        if (dragStart === undefined) return
         const low = Math.min(dragStart, i)
         const high = Math.max(dragStart, i)
         this.setSelection(selectRange(ofLength(table.height(this.dataTable)), low, high))
