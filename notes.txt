@@ -1,17 +1,11 @@
  √ do the Update/Enter thing
  √ apply to numeric, categorical, and boolean charts
- - cumulative sort
+ √ cumulative sort
  - transition
 
 For transitions, you need a key function eg
   data(d => d.subject, d => d.name)
 
-Nice to display the min & max values overlaid onto bottom & top of at least numeric chart when it's the sort column.  Then think about, if categories are few enough, labeling them when sorted...
-
-where does the g, or the svg, get blown away?
-  StripesChart.updateThings()
-
-Where does it get created?
-  StripesChart.setContext()
-
 what indexing function can we use which shows sorting without using the y value as the key?  Do we need access to the rank list?
+
+Nice to display the min & max values overlaid onto bottom & top of at least numeric chart when it's the sort column.  Then think about, if categories are few enough, labeling them when sorted...

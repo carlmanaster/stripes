@@ -25,6 +25,7 @@ describe('converter', () => {
       expect(converter.toBoolean('0')).toBe(false)
       expect(converter.toBoolean(null)).toBe(null)
       expect(converter.toBoolean(undefined)).toBe(null)
+      expect(converter.toBoolean('not-a-bool')).toBe(null)
     })
     it('should convert boolean array', () => {
       expect(converter.toBooleanArray(['true', '0'])).toEqual([true, false])
