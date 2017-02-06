@@ -1,7 +1,7 @@
 const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { niceNumber } = require('../utils/nice-number')
-const { ensureG } = require('./utils')
+const { ensureG, isNull, Y } = require('./utils')
 
 const xStandard         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
 const xPositive         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? 0 : scale(d)
@@ -70,6 +70,10 @@ const chart = (functions, config, g, data) => {
   const origin = originFn(scale, min, max)
   const top  = config.top || 0
 
+  const L = d => config.name + ': ' + niceNumber(d)
+  const P = d => d > 0
+  const N = d => d < 0
+
   const myG = ensureG(g, className, left, top)
 
   myG.selectAll('title').remove()
@@ -82,28 +86,24 @@ const chart = (functions, config, g, data) => {
   enter
     .append('rect') // TODO: could do as well with a line.  cheaper?
     .classed('stripe', true)
-    .classed('null', (d) => d === null)
-    .classed('numeric-positive', (d) => d > 0)
-    .classed('numeric-negative', (d) => d < 0)
-    .style('y',     (d, i) => i)
-    .style('x',     xFn(scale, origin))
+    .classed('null', isNull)
+    .classed('numeric-positive', P)
+    .classed('numeric-negative', N)
+    .style('y', Y)
+    .style('x', xFn(scale, origin))
     .style('width', widthFn(scale, origin, w))
     .append('svg:title')
-    .text((d) => config.name + ': ' + niceNumber(d))
+    .text(L)
 
   update
-    .classed('null', (d) => d === null)
-    .classed('numeric-positive', (d) => d > 0)
-    .classed('numeric-negative', (d) => d < 0)
-    .style('y',     (d, i) => i)
-    .style('x',     xFn(scale, origin))
+    .classed('null', isNull)
+    .classed('numeric-positive', P)
+    .classed('numeric-negative', N)
+    .style('y', Y)
+    .style('x', xFn(scale, origin))
     .style('width', widthFn(scale, origin, w))
     .append('svg:title')
-    .text((d) => config.name + ': ' + niceNumber(d))
-    // update.merge(enter).selectAll('rect')
-
-  // update.merge(enter).selectAll('rect')
-  //   .style('y',     (d, i) => i)
+    .text(L)
 }
 
 const pickFunctions = (min, max) => {

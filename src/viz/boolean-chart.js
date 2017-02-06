@@ -1,5 +1,5 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
-const { ensureG } = require('./utils')
+const { ensureG, T, F, isNull, Y } = require('./utils')
 
 const booleanChart = (g, data, config = {}) => {
   const top   = config.top   || 0
@@ -8,6 +8,11 @@ const booleanChart = (g, data, config = {}) => {
   const keys  = [false, true]
   const className = config.className
   const barWidth = width / keys.length
+
+  const X = d => d === null ? 0 : keys.indexOf(d) * barWidth
+  const W = d => d === null ? width : barWidth - 1
+  const T = d => d === true
+  const F = d => d === false
 
   const myG = ensureG(g, className, left, top)
 
@@ -18,20 +23,20 @@ const booleanChart = (g, data, config = {}) => {
   enter
     .append('rect') // TODO: could do as well with a line.  cheaper?
     .classed('stripe', true)
-    .classed('null', (d) => d === null)
-    .classed('boolean-true', (d) => d === true)
-    .classed('boolean-false', (d) => d === false)
-    .style('y',      (d, i) => i)
-    .style('x',      (d)    => d === null ? 0 : keys.indexOf(d) * barWidth)
-    .style('width',  (d)    => d === null ? width : barWidth - 1)
+    .classed('null', isNull)
+    .classed('boolean-true', T)
+    .classed('boolean-false', F)
+    .style('y', Y)
+    .style('x', X)
+    .style('width', W)
 
   update
-    .classed('null', (d) => d === null)
-    .classed('boolean-true', (d) => d === true)
-    .classed('boolean-false', (d) => d === false)
-    .style('y',      (d, i) => i)
-    .style('x',      (d)    => d === null ? 0 : keys.indexOf(d) * barWidth)
-    .style('width',  (d)    => d === null ? width : barWidth - 1)
+    .classed('null', isNull)
+    .classed('boolean-true', T)
+    .classed('boolean-false', F)
+    .style('y', Y)
+    .style('x', X)
+    .style('width', W)
 }
 
 module.exports = {

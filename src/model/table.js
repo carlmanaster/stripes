@@ -2,31 +2,17 @@ const { map, addIndex } = require('ramda')
 const mapIndexed = addIndex(map)
 const { rank } = require('./sorter')
 
-const width = (data) => {
-  return data.length === 0 ? 0 : data[0].length
-}
-
-const height = (data) => {
-  return data.length
-}
-
-const row = (data, ordered, index) => {
-  return data[ordered(index)]
-}
+const width             = data                     => data.length === 0 ? 0 : data[0].length
+const height            = data                     => data.length
+const row               = (data, ordered, index)   => data[ordered(index)]
+const substituteElement = (a, index, newValue)     => mapIndexed((x, i) => i === index ? newValue : x, a)
+const substituteColumn  = (data, index, newColumn) => mapIndexed((a, i) => substituteElement(a, index, newColumn[i]), data)
 
 const column = (data, ordered, index) => {
   if (index < 0) return undefined
   if (index >= width(data)) return undefined
   const a = map(a => a[index], data)
   return mapIndexed((o, i) => a[ordered(i)], a)
-}
-
-const substituteElement = (a, index, newValue) => {
-  return mapIndexed((x, i) => i === index ? newValue : x, a)
-}
-
-const substituteColumn = (data, index, newColumn) => {
-  return mapIndexed((a, i) => substituteElement(a, index, newColumn[i]), data)
 }
 
 const byColumn = (data, index) => {

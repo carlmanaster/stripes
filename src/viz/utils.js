@@ -1,5 +1,9 @@
 const d3 = require('d3')
 
+const isNull = d => d === null
+const notNull = d => d !== null
+const Y = (d, i) => i
+
 const ensureG = (g, className, left, top) => {
   const existingSelection = g.selectAll(`#root_${className}`)
   if (existingSelection._groups[0][0]) return existingSelection
@@ -23,5 +27,8 @@ const ensureG = (g, className, left, top) => {
 }
 
 module.exports = {
+  isNull,
+  notNull,
+  Y,
   ensureG
 }

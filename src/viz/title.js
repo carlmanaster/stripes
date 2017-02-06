@@ -16,9 +16,9 @@ const drawTitle = (g, name, left, click) => {
   myG.selectAll('text')
     .data([name])
     .enter().append('text')
-    .text((d) => d.substr(0, 7))
+    .text(d => d.substr(0, 7))
     .append('svg:title')
-    .text((d) => d)
+    .text(d => d)
 }
 
 module.exports = {

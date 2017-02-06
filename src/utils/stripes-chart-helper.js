@@ -4,7 +4,7 @@ const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
 const { uniq } = require('ramda')
 
-const chartFn = (column) => {
+const chartFn = column => {
   if (isBooleanArray(column)) return booleanChart
   if (isNumberArray(column)) return numericChart
   return categoricalChart

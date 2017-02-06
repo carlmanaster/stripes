@@ -1,4 +1,4 @@
-const _nice = (n) => {
+const _nice = n => {
   const K = 1000
   const M = K * K
   const G = M * K
@@ -12,7 +12,7 @@ const _nice = (n) => {
   return n.toExponential(1)
 }
 
-const niceNumber = (n) => {
+const niceNumber = n => {
   if (n === null) return `null`
   if (n < 0) return `-` + _nice(-n)
   return _nice(n)

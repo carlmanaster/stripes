@@ -1,5 +1,5 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
-const { ensureG } = require('./utils')
+const { ensureG, isNull, notNull, Y } = require('./utils')
 
 const categoricalChart = (g, data, config = {}) => {
   const top       = config.top   || 0
@@ -9,6 +9,10 @@ const categoricalChart = (g, data, config = {}) => {
   const className = config.className
   const increment = width / keys.length
   const barWidth  = Math.max(2, increment)
+
+  const X = d => d === null ? 0 : keys.indexOf(d) * increment
+  const W = d => d === null ? width : barWidth - 1
+  const L = d => config.name + ': ' + (d === null ? 'null' : d)
 
   const myG = ensureG(g, className, left, top)
 
@@ -21,22 +25,22 @@ const categoricalChart = (g, data, config = {}) => {
   enter
     .append('rect') // TODO: could do as well with a line.  cheaper?
     .classed('stripe', true)
-    .classed('null',        (d)    => d === null)
-    .classed('categorical', (d)    => d !== null)
-    .style('y',             (d, i) => i)
-    .style('x',             (d)    => d === null ? 0  : keys.indexOf(d) * increment)
-    .style('width',         (d)    => d === null ? width : barWidth - 1)
+    .classed('null', isNull)
+    .classed('categorical', notNull)
+    .style('y', Y)
+    .style('x', X)
+    .style('width', W)
     .append('svg:title')
-    .text(                  (d)    => config.name + ': ' + (d === null ? 'null' : d))
+    .text(L)
 
   update
-    .classed('null',        (d)    => d === null)
-    .classed('categorical', (d)    => d !== null)
-    .style('y',             (d, i) => i)
-    .style('x',             (d)    => d === null ? 0  : keys.indexOf(d) * increment)
-    .style('width',         (d)    => d === null ? width : barWidth - 1)
+    .classed('null', isNull)
+    .classed('categorical', notNull)
+    .style('y', Y)
+    .style('x', X)
+    .style('width', W)
     .append('svg:title')
-    .text(                  (d)    => config.name + ': ' + (d === null ? 'null' : d))
+    .text(L)
 }
 
 module.exports = {

@@ -4,12 +4,12 @@ const classifier = require('./classifier')
 const table = require('./table')
 const { DATE_FORMATS } = require ('../constants')
 
-const toNumber = (s) => {
+const toNumber = s => {
   const f = parseFloat(s)
   return isNaN(f) ? null : f
 }
 
-const toBoolean = (s) => {
+const toBoolean = s => {
   if (!s) return null
   switch (s.toLowerCase()) {
     case 'true':
@@ -23,26 +23,20 @@ const toBoolean = (s) => {
   }
 }
 
-const toDate = (s) => {
+const toDate = s => {
   if (!s) return null
   if (parseInt(s, 10).toString() === s) return null
   const m = moment(s, DATE_FORMATS)
   return m.isValid() ? m.toDate() : null
 }
 
-const toNumberArray = (a) => {
-  return map(toNumber, a)
-}
+const toNumberArray = a => map(toNumber, a)
 
-const toBooleanArray = (a) => {
-  return map(toBoolean, a)
-}
+const toBooleanArray = a => map(toBoolean, a)
 
-const toDateArray = (a) => {
-  return map(toDate, a)
-}
+const toDateArray = a => map(toDate, a)
 
-const toDataTable = (t) => {
+const toDataTable = t => {
   const o = n => n
   let result = clone(t)
   for (let i = 0; i < table.width(t); i++) {
