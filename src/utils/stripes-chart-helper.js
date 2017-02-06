@@ -2,7 +2,6 @@ const { isNumberArray, isBooleanArray } = require('../model/classifier')
 const { numericChart } = require('../viz/numeric-chart')
 const { categoricalChart } = require('../viz/categorical-chart')
 const { booleanChart } = require('../viz/boolean-chart')
-const table = require('../model/table')
 const { uniq } = require('ramda')
 
 const chartFn = (column) => {
@@ -21,13 +20,7 @@ const reduceOne = (c, name, index) => {
   return { index, cf, column, config }
 }
 
-const reduce = (c, dataTable, columnNames) => {
-  var packets = []
-  for (var i = 0; i < table.width(dataTable); i++) {
-    packets.push(reduceOne(c, columnNames[i], i))
-  }
-  return packets
-}
+const reduce = (c, names) => names.map((n, i) => reduceOne(c, n, i))
 
 module.exports = {
   reduce

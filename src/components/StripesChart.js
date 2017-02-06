@@ -53,7 +53,7 @@ class StripesChart extends Component {
   drawChart(g) {
     const { columnNames } = this.props
     const c = curry(table.column)(this.dataTable, i => i)
-    const packets = reduce(c, this.dataTable, columnNames)
+    const packets = reduce(c, columnNames)
     packets.forEach(({ index, cf, column, config }) => {
       const click = () => {
         this.updateThings(index)

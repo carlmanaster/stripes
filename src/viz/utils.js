@@ -8,11 +8,11 @@ const ensureG = (g, className, left, top) => {
     .on('keydown', () => {
       if (d3.event.keyCode === 78) { // Night
         d3.select('body')
-          .classed('dark', true);
+          .classed('dark', true)
       }
       if (d3.event.keyCode === 68) { // Day
         d3.select('body')
-          .classed('dark', false);
+          .classed('dark', false)
       }
     })
 

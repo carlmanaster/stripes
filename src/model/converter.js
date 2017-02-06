@@ -5,14 +5,13 @@ const table = require('./table')
 const { DATE_FORMATS } = require ('../constants')
 
 const toNumber = (s) => {
-  // if (s === undefined || s === null) return null
   const f = parseFloat(s)
   return isNaN(f) ? null : f
 }
 
 const toBoolean = (s) => {
   if (!s) return null
-  switch(s.toLowerCase()) {
+  switch (s.toLowerCase()) {
     case 'true':
     case '1':
       return true

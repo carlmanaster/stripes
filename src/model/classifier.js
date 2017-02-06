@@ -4,8 +4,8 @@ const { DATE_FORMATS } = require ('../constants')
 
 const satisfy                = (fs, a) => all(anyPass(fs))(a)
 const isNull                 = (x)     => x === null || x === undefined
-const isNumber               = (x)     => typeof(x) === 'number'
-const isBoolean              = (x)     => typeof(x) === 'boolean'
+const isNumber               = (x)     => typeof x === 'number'
+const isBoolean              = (x)     => typeof x === 'boolean'
 const isNumberArray          = (a)     => satisfy([isNull, isNumber], a)
 const isBooleanArray         = (a)     => satisfy([isNull, isBoolean], a)
 const representsNull         = (s)     => isNull(s) || s === ''

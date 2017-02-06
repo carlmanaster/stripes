@@ -1,5 +1,5 @@
 const { map, addIndex } = require('ramda')
-const mapIndexed = addIndex(map);
+const mapIndexed = addIndex(map)
 const { rank } = require('./sorter')
 
 const width = (data) => {

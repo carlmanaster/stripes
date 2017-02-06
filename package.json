@@ -3,10 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://carlmanaster.github.io/stripes",
+  "scripts": {
+    "start": "react-scripts start",
+    "now-start": "serve build/",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom --coverage --watch",
+    "lint": "nodemon --exec 'standard --verbose | snazzy'",
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public",
+    "deploy": "npm run build&&gh-pages -d build"
+  },
   "devDependencies": {
     "@kadira/storybook": "^2.21.0",
     "gh-pages": "^0.12.0",
-    "react-scripts": "0.8.5"
+    "nodemon": "^1.11.0",
+    "react-scripts": "0.8.5",
+    "snazzy": "^6.0.0",
+    "standard": "^8.6.0"
   },
   "dependencies": {
     "@kadira/storybook": "^2.35.3",
@@ -17,15 +31,20 @@
     "react-dom": "^15.4.2",
     "react-faux-dom": "^3.0.0",
     "react-file-input": "^0.2.5",
-    "react-router": "^3.0.2"
+    "react-router": "^3.0.2",
+    "serve": "^3.1.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --coverage --watch",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public",
-    "deploy": "npm run build&&gh-pages -d build"
+  "standard": {
+    "globals": [
+      "it",
+      "describe",
+      "beforeEach",
+      "afterEach",
+      "before",
+      "after",
+      "context",
+      "jasmine",
+      "expect"
+    ]
   }
 }

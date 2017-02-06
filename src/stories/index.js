@@ -1,6 +1,6 @@
 const React = require('react')
 const { map, sort } = require('ramda')
-const { storiesOf, action, linkTo } = require('@kadira/storybook')
+const { storiesOf } = require('@kadira/storybook')
 
 const { numericChart } = require('../viz/numeric-chart')
 const { categoricalChart } = require('../viz/categorical-chart')
