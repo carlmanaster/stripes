@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@kadira/storybook": "^2.35.3",
-    "d3": "^4.4.4",
+    "d3": "^4.6.0",
     "moment": "^2.17.1",
     "ramda": "^0.22.1",
     "react": "^15.4.2",
@@ -32,7 +32,7 @@
     "react-faux-dom": "^3.0.0",
     "react-file-input": "^0.2.5",
     "react-router": "^3.0.2",
-    "serve": "^3.1.0"
+    "serve": "^3.4.0"
   },
   "standard": {
     "globals": [

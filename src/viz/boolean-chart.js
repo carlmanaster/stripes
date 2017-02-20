@@ -14,29 +14,25 @@ const booleanChart = (g, data, config = {}) => {
   const T = d => d === true
   const F = d => d === false
 
+  const formatElements = elements => {
+    elements
+      .classed('stripe', true)
+      .classed('null', isNull)
+      .classed('boolean-true', T)
+      .classed('boolean-false', F)
+      .style('y', Y)
+      .style('x', X)
+      .style('width', W)
+  }
+
   const myG = ensureG(g, className, left, top)
 
   const update = myG.selectAll('rect')
     .data(data, (d, i) => i)
+  const enter = update.enter().append('rect')
 
-  const enter = update.enter()
-  enter
-    .append('rect') // TODO: could do as well with a line.  cheaper?
-    .classed('stripe', true)
-    .classed('null', isNull)
-    .classed('boolean-true', T)
-    .classed('boolean-false', F)
-    .style('y', Y)
-    .style('x', X)
-    .style('width', W)
-
-  update
-    .classed('null', isNull)
-    .classed('boolean-true', T)
-    .classed('boolean-false', F)
-    .style('y', Y)
-    .style('x', X)
-    .style('width', W)
+  formatElements(enter)
+  formatElements(update)
 }
 
 module.exports = {

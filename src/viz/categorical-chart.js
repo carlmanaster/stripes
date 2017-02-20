@@ -14,33 +14,28 @@ const categoricalChart = (g, data, config = {}) => {
   const W = d => d === null ? width : barWidth - 1
   const L = d => config.name + ': ' + (d === null ? 'null' : d)
 
+  const formatElements = elements => {
+    elements
+      .classed('stripe', true)
+      .classed('null', isNull)
+      .classed('categorical', notNull)
+      .style('y', Y)
+      .style('x', X)
+      .style('width', W)
+      .append('svg:title')
+      .text(L)
+  }
+
   const myG = ensureG(g, className, left, top)
 
   myG.selectAll('title').remove()
 
   const update = myG.selectAll('rect')
     .data(data, (d, i) => i)
+  const enter = update.enter().append('rect')
 
-  const enter = update.enter()
-  enter
-    .append('rect') // TODO: could do as well with a line.  cheaper?
-    .classed('stripe', true)
-    .classed('null', isNull)
-    .classed('categorical', notNull)
-    .style('y', Y)
-    .style('x', X)
-    .style('width', W)
-    .append('svg:title')
-    .text(L)
-
-  update
-    .classed('null', isNull)
-    .classed('categorical', notNull)
-    .style('y', Y)
-    .style('x', X)
-    .style('width', W)
-    .append('svg:title')
-    .text(L)
+  formatElements(enter)
+  formatElements(update)
 }
 
 module.exports = {

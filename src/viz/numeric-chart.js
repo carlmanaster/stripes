@@ -74,36 +74,29 @@ const chart = (functions, config, g, data) => {
   const P = d => d > 0
   const N = d => d < 0
 
+  const formatElements = elements => {
+    elements
+      .classed('stripe', true)
+      .classed('null', isNull)
+      .classed('numeric-positive', P)
+      .classed('numeric-negative', N)
+      .style('y', Y)
+      .style('x', xFn(scale, origin))
+      .style('width', widthFn(scale, origin, w))
+      .append('svg:title')
+      .text(L)
+  }
+
   const myG = ensureG(g, className, left, top)
 
   myG.selectAll('title').remove()
 
   const update = myG.selectAll('rect')
-    // .data(data)
     .data(data, (d, i) => i)
+  const enter = update.enter().append('rect')
 
-  const enter = update.enter()
-  enter
-    .append('rect') // TODO: could do as well with a line.  cheaper?
-    .classed('stripe', true)
-    .classed('null', isNull)
-    .classed('numeric-positive', P)
-    .classed('numeric-negative', N)
-    .style('y', Y)
-    .style('x', xFn(scale, origin))
-    .style('width', widthFn(scale, origin, w))
-    .append('svg:title')
-    .text(L)
-
-  update
-    .classed('null', isNull)
-    .classed('numeric-positive', P)
-    .classed('numeric-negative', N)
-    .style('y', Y)
-    .style('x', xFn(scale, origin))
-    .style('width', widthFn(scale, origin, w))
-    .append('svg:title')
-    .text(L)
+  formatElements(enter)
+  formatElements(update)
 }
 
 const pickFunctions = (min, max) => {
