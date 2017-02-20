@@ -1,5 +1,5 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
-const { ensureG, T, F, isNull, Y } = require('./utils')
+const { ensureG, isNull, Y } = require('./utils')
 
 const booleanChart = (g, data, config = {}) => {
   const top   = config.top   || 0
