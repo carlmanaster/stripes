@@ -1,7 +1,7 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { ensureG, isNull, Y } = require('./utils')
 
-const booleanChart = (g, data, config = {}) => {
+const booleanChart = (g, data, config = {}, mouseUp, mouseDown, mouseMove) => {
   const top   = config.top   || 0
   const left  = config.left  || 0
   const width = config.width || DEFAULT_COLUMN_WIDTH
@@ -23,6 +23,9 @@ const booleanChart = (g, data, config = {}) => {
       .style('y', Y)
       .style('x', X)
       .style('width', W)
+      .on('mousedown', mouseDown)
+      .on('mouseup', mouseUp)
+      .on('mousemove', mouseMove)
   }
 
   const myG = ensureG(g, className, left, top)

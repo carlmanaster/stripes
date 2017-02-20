@@ -61,7 +61,7 @@ const jaggedRight = {
   originFn: originJaggedRight
 }
 
-const chart = (functions, config, g, data) => {
+const chart = (functions, config, g, data, mouseUp, mouseDown, mouseMove) => {
   const { xFn, widthFn, domainFn, rangeFn, originFn } = functions
   const { w, left, min, max, className } = config
   const scale = d3.scaleLinear()
@@ -83,6 +83,9 @@ const chart = (functions, config, g, data) => {
       .style('y', Y)
       .style('x', xFn(scale, origin))
       .style('width', widthFn(scale, origin, w))
+      .on('mousedown', mouseDown)
+      .on('mouseup', mouseUp)
+      .on('mousemove', mouseMove)
       .append('svg:title')
       .text(L)
   }
@@ -107,7 +110,7 @@ const pickFunctions = (min, max) => {
   else                           return jaggedRight
 }
 
-const numericChart = (g, data, config = {}) => {
+const numericChart = (g, data, config = {}, mouseUp, mouseDown, mouseMove) => {
   const min = d3.min(data)
   const max = d3.max(data)
   const functions = pickFunctions(min, max)
@@ -115,7 +118,7 @@ const numericChart = (g, data, config = {}) => {
   config.w    = config.width || DEFAULT_COLUMN_WIDTH
   config.min  = min
   config.max  = max
-  return chart(functions, config, g, data)
+  return chart(functions, config, g, data, mouseUp, mouseDown, mouseMove)
 }
 
 module.exports = {

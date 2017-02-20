@@ -17,6 +17,21 @@ const dragBoundaries = i => {
   return { low, high }
 }
 
+const mouseDown = chart => (d, i) => {
+  dragStart = i
+  chart.setSelection(chart.emptySelection())
+}
+const mouseUp = chart => (d, i) => {
+  const { low, high } = dragBoundaries(i)
+  dragStart = undefined
+  chart.setSelection(selectRange(chart.emptySelection(), low, high))
+}
+const mouseMove = chart => (d, i) => {
+  if (dragStart === undefined) return
+  const { low, high } = dragBoundaries(i)
+  chart.setSelection(selectRange(chart.emptySelection(), low, high))
+}
+
 class StripesChart extends Component {
   displayName: 'StripesChart'
 
@@ -40,22 +55,7 @@ class StripesChart extends Component {
   drawMySelection(g) {
     const width = 50 * table.width(this.dataTable)
     const selection = this.selection
-    const mouseDown = (d, i) => {
-      dragStart = i
-      this.setSelection(this.emptySelection())
-    }
-    const mouseUp = (d, i) => {
-      const { low, high } = dragBoundaries(i)
-      dragStart = undefined
-      this.setSelection(selectRange(this.emptySelection(), low, high))
-    }
-    const mouseMove = (d, i) => {
-      if (dragStart === undefined) return
-      const { low, high } = dragBoundaries(i)
-      this.setSelection(selectRange(this.emptySelection(), low, high))
-    }
-
-    drawSelection(g, selection, width, mouseUp, mouseDown, mouseMove)
+    drawSelection(g, selection, width, mouseUp(this), mouseDown(this), mouseMove(this))
   }
 
   drawChart(g) {
@@ -67,7 +67,7 @@ class StripesChart extends Component {
         this.updateThings(index)
       }
       drawTitle(g, config.name, config.left, click)
-      cf(g, column, config)
+      cf(g, column, config, mouseUp(this), mouseDown(this), mouseMove(this))
     })
   }
 

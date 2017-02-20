@@ -1,7 +1,7 @@
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
 const { ensureG, isNull, notNull, Y } = require('./utils')
 
-const categoricalChart = (g, data, config = {}) => {
+const categoricalChart = (g, data, config = {}, mouseUp, mouseDown, mouseMove) => {
   const top       = config.top   || 0
   const left      = config.left  || 0
   const width     = config.width || DEFAULT_COLUMN_WIDTH
@@ -22,6 +22,9 @@ const categoricalChart = (g, data, config = {}) => {
       .style('y', Y)
       .style('x', X)
       .style('width', W)
+      .on('mousedown', mouseDown)
+      .on('mouseup', mouseUp)
+      .on('mousemove', mouseMove)
       .append('svg:title')
       .text(L)
   }
