@@ -11,12 +11,22 @@ const { drawSelection } = require('../viz/selection')
 
 let dragStart = undefined
 
+const dragBoundaries = i => {
+  const low = Math.min(dragStart, i)
+  const high = Math.max(dragStart, i)
+  return { low, high }
+}
+
 class StripesChart extends Component {
   displayName: 'StripesChart'
 
   propTypes: {
     dataTable: PropTypes.array.isRequired,
     columnNames: PropTypes.array.isRequired
+  }
+
+  emptySelection() {
+    return ofLength(table.height(this.dataTable))
   }
 
   setSelection(selection) {
@@ -32,19 +42,17 @@ class StripesChart extends Component {
     const selection = this.selection
     const mouseDown = (d, i) => {
       dragStart = i
-      this.setSelection(ofLength(table.height(this.dataTable)))
+      this.setSelection(this.emptySelection())
     }
     const mouseUp = (d, i) => {
-      const low = Math.min(dragStart, i)
-      const high = Math.max(dragStart, i)
+      const { low, high } = dragBoundaries(i)
       dragStart = undefined
-      this.setSelection(selectRange(ofLength(table.height(this.dataTable)), low, high))
+      this.setSelection(selectRange(this.emptySelection(), low, high))
     }
     const mouseMove = (d, i) => {
       if (dragStart === undefined) return
-      const low = Math.min(dragStart, i)
-      const high = Math.max(dragStart, i)
-      this.setSelection(selectRange(ofLength(table.height(this.dataTable)), low, high))
+      const { low, high } = dragBoundaries(i)
+      this.setSelection(selectRange(this.emptySelection(), low, high))
     }
 
     drawSelection(g, selection, width, mouseUp, mouseDown, mouseMove)
@@ -65,7 +73,7 @@ class StripesChart extends Component {
 
   componentDidMount() {
     this.dataTable = clone(this.props.dataTable)
-    this.selection = ofLength(table.height(this.dataTable))
+    this.selection = this.emptySelection()
     this.doThings()
   }
 
