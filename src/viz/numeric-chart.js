@@ -1,6 +1,6 @@
 const d3 = require('d3')
 const { DEFAULT_COLUMN_WIDTH } = require('../constants')
-const { niceNumber } = require('../utils/nice-number')
+const { niceNumber } = require('nice-number')
 const { ensureG, isNull, Y } = require('./utils')
 
 const xStandard         = (scale, origin) => (d)    => d === null ? 0 : d > 0 ? origin : scale(d)
